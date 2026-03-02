@@ -79,38 +79,41 @@ export default function AppWorkspace({
   return (
     <section
       id="app-workspace"
-      className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-12"
+      className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16"
     >
-      <div className="mb-6 sm:mb-8">
-        <p className="text-[10px] uppercase tracking-[0.2em] text-terracotta">
-          Application Workspace
+      <div className="mb-8 sm:mb-10">
+        <p className="flex items-center gap-2.5 text-[10px] uppercase tracking-[0.25em] text-gold font-medium">
+          <span className="w-6 h-px bg-gold/60" />
+          Studio
         </p>
-        <h2 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-cream mt-2">
+        <h2 className="font-display text-3xl sm:text-4xl font-medium tracking-tight text-parchment mt-3">
           Restyle your room now
         </h2>
-        <p className="text-warm-gray-light text-sm mt-2 max-w-2xl">
+        <p className="text-parchment-muted text-sm mt-3 max-w-2xl font-light leading-relaxed">
           Complete pipeline: upload, transform, iterate, compare, and export.
           Everything below is fully interactive and connected to the AI
           generation APIs.
         </p>
       </div>
 
-      <div className="w-full space-y-6 sm:space-y-10">
-        <section className="w-full animate-fade-up">
+      <div className="w-full space-y-8 sm:space-y-12">
+        {/* Mode Tabs */}
+        <section className="w-full animate-reveal-up">
           <ModeTabs activeMode={mode} onModeChange={onModeChange} />
         </section>
 
-        <section className="w-full animate-fade-up bg-charcoal-light border border-warm-gray/30 rounded-xl p-4 sm:p-6">
+        {/* Step 01 — Upload */}
+        <section className="w-full animate-reveal-up relative rounded-xl border-l-2 border-l-gold/30 border border-parchment-faint/12 bg-ink-raised p-5 sm:p-7">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-[10px] uppercase tracking-[0.2em] text-terracotta font-medium">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-medium">
               01
             </span>
-            <div className="h-px flex-1 bg-warm-gray/30" />
-            <span className="text-[10px] uppercase tracking-[0.2em] text-warm-gray-light">
+            <div className="h-px flex-1 bg-parchment-faint/15" />
+            <span className="text-[10px] uppercase tracking-[0.2em] text-parchment-muted">
               Upload
             </span>
           </div>
-          <p className="text-[11px] text-warm-gray-light/70 mb-4">
+          <p className="text-[11px] text-parchment-muted/70 mb-5 font-light">
             {mode === "paint"
               ? "Upload a photo of any room. AI will change only wall color and preserve the rest of the scene."
               : "Upload a room image. AI redesigns style while preserving your layout and core room structure."}{" "}
@@ -122,21 +125,22 @@ export default function AppWorkspace({
           />
         </section>
 
+        {/* Step 02 — Style / Color */}
         {originalImage && (
           <section
-            className="w-full animate-fade-up bg-charcoal-light border border-warm-gray/30 rounded-xl p-4 sm:p-6"
+            className="w-full animate-reveal-up relative rounded-xl border-l-2 border-l-gold/30 border border-parchment-faint/12 bg-ink-raised p-5 sm:p-7"
             style={{ animationDelay: "40ms" }}
           >
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-terracotta font-medium">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-medium">
                 02
               </span>
-              <div className="h-px flex-1 bg-warm-gray/30" />
-              <span className="text-[10px] uppercase tracking-[0.2em] text-warm-gray-light">
+              <div className="h-px flex-1 bg-parchment-faint/15" />
+              <span className="text-[10px] uppercase tracking-[0.2em] text-parchment-muted">
                 {mode === "paint" ? "Color" : "Style"}
               </span>
             </div>
-            <p className="text-[11px] text-warm-gray-light/70 mb-4">
+            <p className="text-[11px] text-parchment-muted/70 mb-5 font-light">
               {mode === "paint"
                 ? "Choose wall color and finish to repaint only painted surfaces in your room."
                 : "Choose a design direction or type a custom prompt to generate your first full redesign."}{" "}
@@ -156,15 +160,17 @@ export default function AppWorkspace({
           </section>
         )}
 
+        {/* Error */}
         {error && (
-          <div className="border border-red-900/30 bg-red-950/20 rounded-lg px-5 py-4 text-red-300 text-sm animate-fade-up">
+          <div className="border border-rose/30 bg-rose/8 rounded-lg px-5 py-4 text-rose text-sm animate-reveal-up">
             {error}
           </div>
         )}
 
+        {/* Variations */}
         {showVariations && (
           <section
-            className="w-full animate-fade-up bg-charcoal-light border border-warm-gray/30 rounded-xl p-4 sm:p-6"
+            className="w-full animate-reveal-up relative rounded-xl border-l-2 border-l-gold/30 border border-parchment-faint/12 bg-ink-raised p-5 sm:p-7"
             style={{ animationDelay: "40ms" }}
           >
             <VariationsGrid
@@ -176,21 +182,22 @@ export default function AppWorkspace({
           </section>
         )}
 
+        {/* Step 03 — Result */}
         {restyledImage && !showVariations && (
           <section
-            className="w-full animate-fade-up bg-charcoal-light border border-warm-gray/30 rounded-xl p-4 sm:p-6"
+            className="w-full animate-reveal-up relative rounded-xl border-l-2 border-l-gold/30 border border-parchment-faint/12 bg-ink-raised p-5 sm:p-7"
             style={{ animationDelay: "40ms" }}
           >
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-terracotta font-medium">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-medium">
                 03
               </span>
-              <div className="h-px flex-1 bg-warm-gray/30" />
-              <span className="text-[10px] uppercase tracking-[0.2em] text-warm-gray-light">
+              <div className="h-px flex-1 bg-parchment-faint/15" />
+              <span className="text-[10px] uppercase tracking-[0.2em] text-parchment-muted">
                 {currentStyle}
               </span>
             </div>
-            <p className="text-[11px] text-warm-gray-light/70 mb-4">
+            <p className="text-[11px] text-parchment-muted/70 mb-5 font-light">
               {mode === "paint"
                 ? "Drag the slider to compare before and after. Pick another swatch to instantly test a different paint direction."
                 : "Drag the slider to compare before/after. Then refine by chat, or branch into 4 new design interpretations."}
@@ -199,14 +206,14 @@ export default function AppWorkspace({
             <BeforeAfter before={originalImage} after={restyledImage} />
 
             {!isGenerating && (
-              <div className="mt-4 flex items-center justify-between flex-wrap gap-2">
+              <div className="mt-5 flex items-center justify-between flex-wrap gap-2">
                 {mode !== "paint" && (
                   <div className="flex items-center gap-2">
                     {variations.length > 0 && (
                       <button
                         onClick={onBackToVariations}
                         title="Go back to the 2x2 grid to pick a different variation"
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-cream border border-warm-gray/40 bg-charcoal rounded-full hover:border-terracotta hover:bg-terracotta/20 transition-all duration-150 cursor-pointer focus:outline-none focus:ring-2 focus:ring-terracotta/60"
+                        className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink rounded-full hover:border-gold/50 hover:bg-gold/8 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold/40"
                       >
                         <svg
                           className="w-3.5 h-3.5"
@@ -232,7 +239,7 @@ export default function AppWorkspace({
                           ? "Discard current variations and generate 4 new ones from scratch"
                           : "Generate 4 different AI interpretations of this style to choose from"
                       }
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-cream border border-warm-gray/40 bg-charcoal rounded-full hover:border-sage hover:bg-sage/20 transition-all duration-150 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-sage/60"
+                      className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink rounded-full hover:border-olive/60 hover:bg-olive/12 transition-all duration-200 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-olive/40"
                     >
                       <svg
                         className="w-3.5 h-3.5"
@@ -262,7 +269,7 @@ export default function AppWorkspace({
                       <button
                         onClick={onUndo}
                         disabled={!canUndo}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-cream border border-warm-gray/40 bg-charcoal rounded-full hover:border-terracotta hover:bg-terracotta/20 transition-all duration-150 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-terracotta/60"
+                        className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink rounded-full hover:border-gold/50 hover:bg-gold/8 transition-all duration-200 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gold/40"
                       >
                         <svg
                           className="w-3.5 h-3.5"
@@ -282,7 +289,7 @@ export default function AppWorkspace({
                       <button
                         onClick={onRedo}
                         disabled={!canRedo}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-cream border border-warm-gray/40 bg-charcoal rounded-full hover:border-terracotta hover:bg-terracotta/20 transition-all duration-150 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-terracotta/60"
+                        className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink rounded-full hover:border-gold/50 hover:bg-gold/8 transition-all duration-200 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gold/40"
                       >
                         Redo
                         <svg
@@ -299,7 +306,7 @@ export default function AppWorkspace({
                           />
                         </svg>
                       </button>
-                      <span className="text-[10px] text-warm-gray/40 ml-1">
+                      <span className="text-[10px] text-parchment-faint/50 ml-1">
                         {versionIndex === -1 ? versions.length : versionIndex + 1} / {versions.length}
                       </span>
                     </>
@@ -309,7 +316,7 @@ export default function AppWorkspace({
             )}
 
             {mode !== "paint" && (moodBoard || moodBoardLoading) && (
-              <div className="mt-6">
+              <div className="mt-7">
                 <MoodBoard data={moodBoard} isLoading={moodBoardLoading} />
               </div>
             )}

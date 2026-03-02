@@ -22,27 +22,26 @@ const MODE_HINTS: Record<AppMode, string> = {
 export default function ModeTabs({ activeMode, onModeChange }: ModeTabsProps) {
   return (
     <div className="space-y-3">
-      <div className="flex gap-1 bg-charcoal rounded-lg p-1 border border-warm-gray/20">
+      <div className="flex gap-1 bg-ink rounded-lg p-1 border border-parchment-faint/15">
         {MODES.map((mode) => (
           <button
             key={mode.key}
             onClick={() => onModeChange(mode.key)}
-            className={`flex-1 px-3 py-2.5 rounded-md text-center transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-terracotta/60 ${
-              activeMode === mode.key
-                ? "bg-terracotta/20 border border-terracotta/50 text-cream"
-                : "border border-transparent text-warm-gray-light hover:text-cream hover:bg-charcoal-light"
-            }`}
+            className={`flex-1 px-3 py-3 rounded-md text-center transition-all duration-250 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold/40 ${activeMode === mode.key
+              ? "bg-gold text-ink shadow-[0_0_12px_rgba(201,168,76,0.15)]"
+              : "border border-transparent text-parchment-muted hover:text-parchment hover:bg-ink-elevated"
+              }`}
           >
             <span className="block text-xs sm:text-sm font-medium">
               {mode.label}
             </span>
-            <span className="hidden sm:block text-[10px] text-warm-gray-light mt-0.5">
+            <span className={`hidden sm:block text-[10px] mt-0.5 transition-colors duration-250 ${activeMode === mode.key ? "text-ink/60" : "text-parchment-muted"}`}>
               {mode.description}
             </span>
           </button>
         ))}
       </div>
-      <p className="text-xs text-warm-gray-light leading-relaxed px-1">
+      <p className="text-xs text-parchment-muted leading-relaxed px-1 font-light">
         {MODE_HINTS[activeMode]}
       </p>
     </div>

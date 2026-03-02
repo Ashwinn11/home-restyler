@@ -29,13 +29,13 @@ export default function BeforeAfter({ before, after }: BeforeAfterProps) {
   );
 
   return (
-    <div className="space-y-4 animate-fade-up">
+    <div className="space-y-4 animate-reveal-up">
       {/* Labels */}
       <div className="flex justify-between items-center">
-        <span className="text-[10px] uppercase tracking-[0.2em] text-warm-gray font-medium">
+        <span className="text-[10px] uppercase tracking-[0.2em] text-parchment-faint font-medium">
           Original
         </span>
-        <span className="text-[10px] uppercase tracking-[0.2em] text-terracotta font-medium">
+        <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-medium">
           Restyled
         </span>
       </div>
@@ -80,29 +80,27 @@ export default function BeforeAfter({ before, after }: BeforeAfterProps) {
 
         {/* Slider line */}
         <div
-          className="absolute top-0 bottom-0 w-px transition-colors"
+          className="absolute top-0 bottom-0 w-px transition-colors duration-200"
           style={{
             left: `${sliderPos}%`,
             backgroundColor: isDragging
-              ? "rgba(196,101,58,0.8)"
-              : "rgba(245,240,235,0.6)",
+              ? "rgba(201,168,76,0.8)"
+              : "rgba(240,235,227,0.5)",
           }}
         >
           {/* Handle */}
           <div
-            className={`absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ${
-              isDragging ? "scale-110" : "group-hover:scale-105"
-            }`}
+            className={`absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ${isDragging ? "scale-110" : "group-hover:scale-105"
+              }`}
           >
             <div
-              className={`w-12 h-12 sm:w-10 sm:h-10 rounded-full border-2 flex items-center justify-center backdrop-blur-md transition-all duration-200 ${
-                isDragging
-                  ? "border-terracotta bg-terracotta/20 shadow-[0_0_20px_rgba(196,101,58,0.3)]"
-                  : "border-cream/60 bg-charcoal/40"
-              }`}
+              className={`w-12 h-12 sm:w-10 sm:h-10 rounded-full border-2 flex items-center justify-center backdrop-blur-md transition-all duration-200 ${isDragging
+                  ? "border-gold bg-gold/15 shadow-[0_0_20px_rgba(201,168,76,0.25)]"
+                  : "border-parchment/50 bg-ink/40"
+                }`}
             >
               <svg
-                className="w-4 h-4 text-cream"
+                className="w-4 h-4 text-parchment"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -119,10 +117,10 @@ export default function BeforeAfter({ before, after }: BeforeAfterProps) {
         </div>
 
         {/* Edge labels inside image */}
-        <div className="absolute bottom-3 left-3 px-2.5 py-1 bg-charcoal/60 backdrop-blur-sm text-[10px] uppercase tracking-[0.15em] text-cream/80 rounded">
+        <div className="absolute bottom-3 left-3 px-2.5 py-1 bg-ink/60 backdrop-blur-sm text-[10px] uppercase tracking-[0.15em] text-parchment/80 rounded">
           Before
         </div>
-        <div className="absolute bottom-3 right-3 px-2.5 py-1 bg-terracotta/80 backdrop-blur-sm text-[10px] uppercase tracking-[0.15em] text-cream rounded">
+        <div className="absolute bottom-3 right-3 px-2.5 py-1 bg-gold/80 backdrop-blur-sm text-[10px] uppercase tracking-[0.15em] text-ink font-medium rounded">
           After
         </div>
       </div>

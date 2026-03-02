@@ -14,6 +14,8 @@ import type {
 } from "@/lib/types";
 
 export default function HomeClient() {
+  const brandIcon = "/icon.png";
+
   const [originalImage, setOriginalImage] = useState("");
   const [originalMimeType, setOriginalMimeType] = useState("");
   const [restyledImage, setRestyledImage] = useState("");
@@ -436,10 +438,10 @@ export default function HomeClient() {
 
         const newMessages = data.text
           ? [
-              ...chatMessages,
-              { role: "user" as const, text: message },
-              { role: "assistant" as const, text: data.text },
-            ]
+            ...chatMessages,
+            { role: "user" as const, text: message },
+            { role: "assistant" as const, text: data.text },
+          ]
           : [...chatMessages, { role: "user" as const, text: message }];
 
         const resultSnapshot: Snapshot = {
@@ -487,20 +489,28 @@ export default function HomeClient() {
         : "Restyling your room";
 
   return (
-    <main className="min-h-screen bg-charcoal flex flex-col">
-      <header className="sticky top-0 z-30 border-b border-warm-gray/25 bg-charcoal-light/90 backdrop-blur-sm">
+    <main className="min-h-screen bg-ink flex flex-col">
+      {/* ═══ HEADER ═══ */}
+      <header className="sticky top-0 z-30 border-b border-parchment-faint/12 bg-ink/90 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <div>
-            <p className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-cream">
-              Room Restyler
-            </p>
-            <p className="text-warm-gray-light text-xs mt-0.5 font-light">
-              AI design studio for instantly upgraded spaces
-            </p>
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 border border-gold/30 rounded-sm flex items-center justify-center bg-ink-elevated relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <img src={brandIcon} alt="" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex items-center gap-3">
+              <p className="font-display text-2xl sm:text-3xl font-medium tracking-tight text-parchment">
+                Room Restyler
+              </p>
+              <span className="hidden sm:block w-px h-5 bg-gold/30" />
+              <p className="hidden sm:block text-parchment-muted text-[11px] tracking-wide font-light">
+                AI Design Studio
+              </p>
+            </div>
           </div>
           <a
             href="#app-workspace"
-            className="px-4 py-2 min-h-10 inline-flex items-center justify-center bg-terracotta text-cream text-[11px] uppercase tracking-[0.16em] font-medium hover:bg-terracotta-light transition-colors"
+            className="px-5 py-2.5 inline-flex items-center justify-center bg-gold text-ink text-[10px] uppercase tracking-[0.18em] font-semibold hover:bg-gold-soft transition-all duration-300 hover:shadow-[0_0_16px_rgba(201,168,76,0.2)]"
           >
             Start Restyling
           </a>
@@ -544,17 +554,26 @@ export default function HomeClient() {
         <GeneratingOverlay text={overlayText} />
       )}
 
-      <footer className="border-t border-warm-gray/25 mt-auto bg-charcoal-light">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 grid sm:grid-cols-2 gap-6 items-center">
-          <div>
-            <p className="font-display text-2xl text-cream">Room Restyler</p>
-            <p className="text-xs uppercase tracking-[0.15em] text-warm-gray-light mt-1">
-              AI Interior Design Workflow
-            </p>
+      {/* ═══ FOOTER ═══ */}
+      <footer className="border-t border-parchment-faint/12 mt-auto bg-ink-raised">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid sm:grid-cols-2 gap-6 items-center">
+          <div className="flex items-start gap-5">
+            <div className="w-12 h-12 border border-gold/20 rounded-sm flex items-center justify-center bg-ink-raised shrink-0 overflow-hidden">
+              <img src={brandIcon} alt="" className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <p className="font-display text-2xl text-parchment font-medium">
+                Room Restyler
+              </p>
+              <div className="w-10 h-px bg-gold/40 mt-2" />
+              <p className="text-[10px] uppercase tracking-[0.2em] text-parchment-muted mt-3">
+                AI Interior Design Workflow
+              </p>
+            </div>
           </div>
-          <div className="text-xs text-warm-gray-light sm:text-right">
+          <div className="text-xs text-parchment-muted sm:text-right space-y-1.5 font-light">
             <p>Upload. Restyle. Refine. Export.</p>
-            <p className="mt-1">
+            <p>
               Powered by Gemini image generation and conversational editing.
             </p>
           </div>

@@ -128,7 +128,7 @@ const organizationSchema = {
   "@type": "Organization",
   name: "Room Restyler",
   url: absoluteUrl("/"),
-  logo: absoluteUrl("/icon"),
+  logo: absoluteUrl("/icon.png"),
   sameAs: [],
 };
 

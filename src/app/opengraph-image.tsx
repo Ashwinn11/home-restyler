@@ -17,54 +17,78 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: 56,
-          backgroundColor: "#1C1917",
+          padding: 80,
+          backgroundColor: "#0D0F0E", // ink
           backgroundImage:
-            "radial-gradient(circle at 80% 20%, rgba(196,101,58,0.35), transparent 45%), radial-gradient(circle at 20% 80%, rgba(139,155,126,0.32), transparent 40%)",
-          color: "#F5F0EB",
-          fontFamily: "Georgia, serif",
+            "radial-gradient(circle at top right, rgba(201,168,76,0.15), transparent 70%), radial-gradient(circle at bottom left, rgba(138,154,108,0.08), transparent 60%)",
+          color: "#F0EBE3", // parchment
         }}
       >
-        <div
-          style={{
-            fontSize: 24,
-            letterSpacing: 3,
-            textTransform: "uppercase",
-            opacity: 0.9,
-          }}
-        >
-          Room Restyler
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <div style={{ width: 40, height: 1, backgroundColor: "#C9A84C" }} />
+          <div
+            style={{
+              fontSize: 24,
+              letterSpacing: 8,
+              textTransform: "uppercase",
+              fontFamily: "serif",
+              color: "#C9A84C",
+            }}
+          >
+            Room Restyler
+          </div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div style={{ fontSize: 72, lineHeight: 1.05, maxWidth: 900 }}>
-            AI Interior Design From One Room Photo
+        <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "baseline",
+              fontSize: 88,
+              lineHeight: 1,
+              maxWidth: 1000,
+              fontFamily: "serif",
+            }}
+          >
+            Conceptual <span style={{ fontStyle: "italic", marginLeft: 20 }}>Refinement</span>.
           </div>
           <div
             style={{
-              fontSize: 28,
-              lineHeight: 1.3,
-              opacity: 0.9,
-              fontFamily: "Helvetica Neue, Arial, sans-serif",
+              fontSize: 32,
+              lineHeight: 1.4,
+              opacity: 0.8,
+              fontWeight: 300,
+              maxWidth: 800,
             }}
           >
-            Upload. Restyle. Refine. Export.
+            Turn a single room photo into a photoreal design concept with AI tuned for interior designers.
           </div>
         </div>
 
         <div
           style={{
-            alignSelf: "flex-start",
-            padding: "10px 18px",
-            border: "1px solid rgba(245, 240, 235, 0.3)",
-            borderRadius: 999,
-            fontSize: 18,
-            letterSpacing: 2,
-            textTransform: "uppercase",
-            fontFamily: "Helvetica Neue, Arial, sans-serif",
+            display: "flex",
+            alignItems: "center",
+            gap: 24,
           }}
         >
-          AI Room Makeovers
+          <div
+            style={{
+              padding: "16px 32px",
+              backgroundColor: "#C9A84C",
+              color: "#0D0F0E",
+              fontSize: 18,
+              letterSpacing: 4,
+              textTransform: "uppercase",
+              fontWeight: 600,
+            }}
+          >
+            Professional Studio
+          </div>
+          <div style={{ fontSize: 18, color: "#C9A84C", opacity: 0.6, letterSpacing: 2 }}>
+            Photoreal AI Workflow
+          </div>
         </div>
       </div>
     ),

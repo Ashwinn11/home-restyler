@@ -61,42 +61,27 @@ export default function StyleSelector({
             key={style.name}
             onClick={() => handleSelect(style)}
             disabled={disabled}
-            className={`group relative text-left p-4 sm:p-5 min-h-28 rounded-lg border transition-all duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed animate-fade-up focus:outline-none focus:ring-2 focus:ring-terracotta/60 ${
-              selected === style.name
-                ? "border-terracotta bg-terracotta/20 shadow-[0_0_20px_rgba(196,101,58,0.2)]"
-                : "border-warm-gray/30 hover:border-warm-gray/60 bg-charcoal-light hover:bg-[#35302d]"
-            }`}
-            style={{ animationDelay: `${i * 35}ms` }}
+            className={`group relative text-left p-5 sm:p-6 min-h-28 rounded-lg border transition-all duration-250 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed animate-reveal-up focus:outline-none focus:ring-2 focus:ring-gold/40 overflow-hidden ${selected === style.name
+              ? "bg-gold border-gold shadow-[0_0_20px_rgba(201,168,76,0.15)]"
+              : "border-parchment-faint/15 hover:border-parchment-faint/30 bg-ink-elevated hover:bg-ink-elevated/80"
+              }`}
+            style={{ animationDelay: `${i * 45}ms` }}
           >
-            {/* Selection indicator */}
-            {selected === style.name && (
-              <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-terracotta" />
-            )}
-
-            <span className="text-[10px] uppercase tracking-[0.15em] text-warm-gray-light font-medium">
+            <span className={`text-[9px] uppercase tracking-[0.2em] font-medium transition-colors duration-250 ${selected === style.name ? "text-ink/60" : "text-parchment-muted"}`}>
               {style.tag}
             </span>
-            <h3 className="font-display text-base text-cream mt-2 leading-tight">
+            <h3 className={`font-display text-lg mt-2 leading-tight font-medium transition-colors duration-250 ${selected === style.name ? "text-ink" : "text-parchment"}`}>
               {style.name}
             </h3>
-            <p className="text-xs text-cream/85 mt-1.5 leading-relaxed">
+            <p className={`text-xs mt-1.5 leading-relaxed font-light transition-colors duration-250 ${selected === style.name ? "text-ink/80" : "text-parchment/75"}`}>
               {style.description}
             </p>
-
-            {/* Bottom accent line on hover */}
-            <div
-              className={`absolute bottom-0 left-4 right-4 h-px transition-all duration-250 ${
-                selected === style.name
-                  ? "bg-terracotta"
-                  : "bg-transparent group-hover:bg-warm-gray/30"
-              }`}
-            />
           </button>
         ))}
       </div>
 
       {/* Custom style input */}
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center bg-charcoal-light border border-warm-gray/30 rounded-lg p-3">
+      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center bg-ink-elevated border border-parchment-faint/15 rounded-lg p-3.5">
         <div className="flex-1 relative">
           <input
             type="text"
@@ -104,7 +89,7 @@ export default function StyleSelector({
             value={customStyle}
             onChange={(e) => setCustomStyle(e.target.value)}
             disabled={disabled}
-            className="w-full bg-transparent border-b border-warm-gray/40 focus:border-terracotta px-0 py-3 text-sm text-cream placeholder:text-warm-gray-light/70 focus:outline-none transition-colors disabled:opacity-40"
+            className="w-full bg-transparent border-b border-parchment-faint/25 focus:border-gold px-0 py-3 text-sm text-parchment placeholder:text-parchment-muted/50 focus:outline-none transition-colors disabled:opacity-40"
             onKeyDown={(e) => {
               if (e.key === "Enter" && customStyle.trim()) {
                 setSelected(null);
@@ -121,7 +106,7 @@ export default function StyleSelector({
             }
           }}
           disabled={disabled || !customStyle.trim()}
-          className="w-full sm:w-auto px-5 py-3 min-h-11 bg-terracotta text-cream text-xs uppercase tracking-[0.15em] font-medium hover:bg-terracotta-light disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-terracotta/60"
+          className="w-full sm:w-auto px-6 py-3 min-h-11 bg-gold text-ink text-[10px] uppercase tracking-[0.18em] font-semibold hover:bg-gold-soft disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gold/40"
         >
           Apply
         </button>

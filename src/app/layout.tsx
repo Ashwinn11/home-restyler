@@ -9,8 +9,8 @@ export const metadata: Metadata = {
     "Reimagine any room in a new design style, powered by AI",
   manifest: "/manifest.webmanifest",
   icons: {
-    icon: [{ url: "/icon", type: "image/png" }],
-    apple: [{ url: "/apple-icon", type: "image/png" }],
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png", type: "image/png" }],
   },
 };
 
@@ -29,11 +29,11 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="font-body bg-charcoal text-cream antialiased grain">
+      <body className="font-body bg-ink text-parchment antialiased grain">
         {children}
       </body>
     </html>

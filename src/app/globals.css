@@ -5,91 +5,141 @@ html {
 }
 
 @theme {
-  --color-cream: #F5F0EB;
-  --color-cream-dark: #EBE4DC;
-  --color-charcoal: #1C1917;
-  --color-charcoal-light: #292524;
-  --color-warm-gray: #78716C;
-  --color-warm-gray-light: #A8A29E;
-  --color-terracotta: #C4653A;
-  --color-terracotta-light: #D4845F;
-  --color-sage: #8B9B7E;
-  --color-sage-light: #A8B59E;
+  /* ── Ink backgrounds ── */
+  --color-ink: #0D0F0E;
+  --color-ink-raised: #171A19;
+  --color-ink-elevated: #1F2322;
 
-  --font-display: "Playfair Display", "Georgia", serif;
-  --font-body: "Outfit", "Helvetica Neue", sans-serif;
+  /* ── Parchment text ── */
+  --color-parchment: #F0EBE3;
+  --color-parchment-muted: #B8AFA3;
+  --color-parchment-faint: #706B63;
+
+  /* ── Gold accent ── */
+  --color-gold: #C9A84C;
+  --color-gold-soft: #D4BA6A;
+
+  /* ── Supporting accents ── */
+  --color-rose: #C17E7E;
+  --color-olive: #8A9A6C;
+
+  /* ── Typography ── */
+  --font-display: "Cormorant Garamond", "Georgia", serif;
+  --font-body: "DM Sans", "Helvetica Neue", sans-serif;
 }
 
-/* Grain texture overlay */
+/* ─── Film-grain overlay ─── */
 .grain::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 40;
   pointer-events: none;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Stagger entrance animations */
-@keyframes fade-up {
+/* ─── Reveal-up entrance ─── */
+@keyframes reveal-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px) scale(0.98);
   }
+
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-.animate-fade-up {
-  animation: fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+.animate-reveal-up {
+  animation: reveal-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (max-width: 640px) {
-  .animate-fade-up {
-    animation-duration: 0.3s;
+  .animate-reveal-up {
+    animation-duration: 0.35s;
   }
 }
 
-/* Pulsing glow for loading */
-@keyframes glow-pulse {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(196, 101, 58, 0.15);
+/* ─── Gold shimmer skeleton ─── */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
   }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg,
+      rgba(201, 168, 76, 0.06) 25%,
+      rgba(201, 168, 76, 0.14) 50%,
+      rgba(201, 168, 76, 0.06) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes draw-path {
+  from {
+    stroke-dashoffset: var(--dash-length);
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw-path {
+  animation: draw-path 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ─── Orbit loader ─── */
+@keyframes orbit {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 16px rgba(201, 168, 76, 0.15);
+  }
+
   50% {
-    box-shadow: 0 0 40px rgba(196, 101, 58, 0.3);
+    box-shadow: 0 0 32px rgba(201, 168, 76, 0.3);
   }
 }
 
-/* Skeleton loading pulse */
-@keyframes skeleton-pulse {
-  0%, 100% {
-    opacity: 0.15;
-  }
-  50% {
-    opacity: 0.3;
-  }
-}
-
-.skeleton-pulse {
-  animation: skeleton-pulse 1.5s ease-in-out infinite;
-}
-
-/* Custom scrollbar for chat */
+/* ─── Custom scrollbar ─── */
 .chat-scroll::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
+
 .chat-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .chat-scroll::-webkit-scrollbar-thumb {
-  background: var(--color-warm-gray-light);
+  background: var(--color-parchment-faint);
   border-radius: 2px;
 }
 
+/* ─── Base resets ─── */
 a,
 button {
   -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: rgba(201, 168, 76, 0.25);
+  color: var(--color-parchment);
 }

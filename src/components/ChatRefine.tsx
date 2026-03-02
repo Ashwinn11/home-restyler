@@ -51,35 +51,35 @@ export default function ChatRefine({
   };
 
   return (
-    <div className="space-y-4 bg-charcoal-light border border-warm-gray/30 rounded-lg p-4 sm:p-5">
+    <div className="space-y-4 bg-ink-elevated border border-parchment-faint/12 rounded-lg p-5 sm:p-6">
       <div className="flex items-center gap-3">
-        <div className="h-px flex-1 bg-warm-gray/30" />
-        <h3 className="text-[10px] uppercase tracking-[0.2em] text-warm-gray-light font-medium">
+        <div className="h-px flex-1 bg-parchment-faint/15" />
+        <h3 className="text-[10px] uppercase tracking-[0.2em] text-parchment-muted font-medium">
           Refine your design
         </h3>
-        <div className="h-px flex-1 bg-warm-gray/30" />
+        <div className="h-px flex-1 bg-parchment-faint/15" />
       </div>
-      <p className="text-[11px] text-warm-gray-light/70">
+      <p className="text-[11px] text-parchment-muted/60 font-light">
         Describe what you want to change in plain language. Each edit creates a new version you can undo.
       </p>
 
       {/* Quick suggestions */}
       {suggestions.length > 0 && (
         <div className="space-y-2">
-          <p className="text-[10px] uppercase tracking-[0.15em] text-warm-gray-light">
+          <p className="text-[10px] uppercase tracking-[0.15em] text-gold/70 font-medium">
             Quick ideas
           </p>
           <div className="flex flex-wrap gap-2">
-          {suggestions.map((s) => (
-            <button
-              key={s}
-              onClick={() => handleSuggestion(s)}
-              disabled={isLoading}
-              className="px-4 py-2 min-h-10 text-sm sm:text-xs text-cream border border-warm-gray/40 bg-charcoal rounded-full hover:border-terracotta hover:bg-terracotta/20 transition-all duration-150 cursor-pointer disabled:opacity-30 focus:outline-none focus:ring-2 focus:ring-terracotta/60"
-            >
-              {s}
-            </button>
-          ))}
+            {suggestions.map((s) => (
+              <button
+                key={s}
+                onClick={() => handleSuggestion(s)}
+                disabled={isLoading}
+                className="px-4 py-2 min-h-10 text-sm sm:text-xs text-parchment border border-gold/25 bg-ink rounded-full hover:border-gold/50 hover:bg-gold/8 transition-all duration-200 cursor-pointer disabled:opacity-30 focus:outline-none focus:ring-2 focus:ring-gold/40"
+              >
+                {s}
+              </button>
+            ))}
           </div>
         </div>
       )}
@@ -93,22 +93,21 @@ export default function ChatRefine({
           {messages.map((msg, i) => (
             <div
               key={i}
-              className={`text-sm px-4 py-2.5 max-w-[92%] sm:max-w-[85%] w-fit animate-fade-up ${
-                msg.role === "user"
-                  ? "ml-auto bg-terracotta/30 text-cream border border-terracotta/50 rounded-2xl rounded-br-sm"
-                  : "bg-charcoal text-cream border border-warm-gray/35 rounded-2xl rounded-bl-sm"
-              }`}
+              className={`text-sm px-4 py-2.5 max-w-[92%] sm:max-w-[85%] w-fit animate-reveal-up ${msg.role === "user"
+                ? "ml-auto bg-gold text-ink shadow-[0_4px_12px_rgba(201,168,76,0.1)] rounded-2xl rounded-br-sm"
+                : "bg-ink-raised text-parchment border border-parchment-faint/15 rounded-2xl rounded-bl-sm"
+                }`}
               style={{ animationDelay: `${i * 24}ms` }}
             >
               {msg.text}
             </div>
           ))}
           {isLoading && (
-            <div className="bg-charcoal text-warm-gray-light border border-warm-gray/30 rounded-2xl rounded-bl-sm px-4 py-2.5 w-fit text-sm">
+            <div className="bg-ink-raised text-parchment-muted border border-parchment-faint/15 rounded-2xl rounded-bl-sm px-4 py-2.5 w-fit text-sm">
               <span className="inline-flex gap-1">
-                <span className="w-1.5 h-1.5 bg-warm-gray/50 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-1.5 h-1.5 bg-warm-gray/50 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                <span className="w-1.5 h-1.5 bg-warm-gray/50 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                <span className="w-1.5 h-1.5 bg-gold/40 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-1.5 h-1.5 bg-gold/40 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-1.5 h-1.5 bg-gold/40 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
               </span>
             </div>
           )}
@@ -117,11 +116,11 @@ export default function ChatRefine({
 
       {/* Element filter pills */}
       <div className="space-y-1.5">
-        <p className="text-[10px] uppercase tracking-[0.15em] text-warm-gray-light">
+        <p className="text-[10px] uppercase tracking-[0.15em] text-parchment-muted font-medium">
           Focus on
         </p>
-        <p className="text-[11px] text-warm-gray-light/70 mb-1">
-          Limit your edit to a specific part of the room. &quot;All&quot; lets AI change anything. Resets after each message.
+        <p className="text-[11px] text-parchment-muted/60 mb-1 font-light">
+          Limit your edit to a specific part. &quot;All&quot; lets AI change anything. Resets after each message.
         </p>
         <div className="flex gap-1.5 flex-wrap">
           {ELEMENT_FILTERS.map((f) => (
@@ -130,11 +129,10 @@ export default function ChatRefine({
               type="button"
               onClick={() => setActiveFilter(f.key)}
               disabled={isLoading}
-              className={`px-3 py-1.5 text-[11px] rounded-full border transition-all duration-150 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-terracotta/60 ${
-                activeFilter === f.key
-                  ? "border-terracotta bg-terracotta/20 text-cream"
-                  : "border-warm-gray/30 text-warm-gray-light hover:border-warm-gray/50 hover:text-cream"
-              }`}
+              className={`px-3 py-1.5 text-[11px] rounded-full border transition-all duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gold/40 ${activeFilter === f.key
+                ? "bg-gold border-gold text-ink"
+                : "border-parchment-faint/20 text-parchment-muted hover:border-parchment-faint/35 hover:text-parchment"
+                }`}
             >
               {f.label}
             </button>
@@ -150,15 +148,15 @@ export default function ChatRefine({
           onChange={(e) => setInput(e.target.value)}
           placeholder="Describe a change..."
           disabled={isLoading}
-          className="flex-1 bg-charcoal border border-warm-gray/40 focus:border-terracotta rounded-md px-3 py-3 text-sm text-cream placeholder:text-warm-gray-light/70 focus:outline-none focus:ring-2 focus:ring-terracotta/40 transition-colors disabled:opacity-40"
+          className="flex-1 bg-ink border-b border-parchment-faint/25 focus:border-gold px-1 py-3 text-sm text-parchment placeholder:text-parchment-muted/50 focus:outline-none transition-colors disabled:opacity-40"
         />
         <button
           type="submit"
           disabled={isLoading || !input.trim()}
-          className="group relative min-w-11 min-h-11 p-2.5 rounded-md bg-terracotta text-cream hover:bg-terracotta-light disabled:bg-warm-gray/40 disabled:text-warm-gray/90 transition-colors cursor-pointer disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-terracotta/60"
+          className="group relative min-w-11 min-h-11 p-2.5 bg-gold text-ink hover:bg-gold-soft disabled:bg-parchment-faint/20 disabled:text-parchment-faint/50 transition-colors cursor-pointer disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gold/40"
         >
           <svg
-            className="w-5 h-5 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
