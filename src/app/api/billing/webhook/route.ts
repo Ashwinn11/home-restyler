@@ -21,8 +21,8 @@ export async function POST(request: Request) {
         const userId = customData?.user_id;
 
         // --- Idempotency Check (Best Practice) ---
-        // Use the event ID from Lemon Squeezy to prevent duplicate processing.
-        const webhookId = payload.meta?.event_id;
+        // Use the webhook_id from Lemon Squeezy (as seen in your payload) or the signature as fallback.
+        const webhookId = payload.meta?.webhook_id || signature;
         const supabase = await createServiceClient();
 
         if (webhookId) {
@@ -30,10 +30,15 @@ export async function POST(request: Request) {
                 .from("processed_webhooks")
                 .insert({ webhook_id: webhookId });
 
-            // If the ID already exists, return Success (200) so LS stops retrying,
-            // but don't re-process the credits.
-            if (idempotencyError && idempotencyError.code === "23505") { // unique_violation
-                return NextResponse.json({ received: true, deduplicated: true });
+            if (idempotencyError) {
+                // If the ID already exists, return Success (200) so LS stops retrying,
+                // but don't re-process the logic.
+                if (idempotencyError.code === "23505") { // unique_violation
+                    return NextResponse.json({ received: true, deduplicated: true });
+                }
+                console.error(`Idempotency table error [${webhookId}]:`, idempotencyError.message);
+            } else {
+                console.log(`Successfully logged webhook: ${webhookId}`);
             }
         }
 
@@ -43,12 +48,20 @@ export async function POST(request: Request) {
         }
 
         const attributes = payload.data?.attributes;
-        const subscriptionId = String(payload.data?.id);
-        const variantId = String(attributes?.variant_id);
+        // LS uses the resource ID as payload.data.id. 
+        // For invoices, the actual subscription ID is in attributes.
+        const resourceId = String(payload.data?.id);
+        const subscriptionId = attributes?.subscription_id ? String(attributes.subscription_id) : resourceId;
+
+        const variantId = attributes?.variant_id ? String(attributes.variant_id) : null;
         const status = attributes?.status;
 
         switch (eventName) {
             case "subscription_created": {
+                if (!variantId) {
+                    console.error("No variant ID in subscription_created");
+                    break;
+                }
                 const plan = getPlanByVariantId(variantId);
                 if (!plan) {
                     console.error("Unknown variant ID:", variantId);
@@ -81,7 +94,12 @@ export async function POST(request: Request) {
                 break;
             }
 
+            case "subscription_plan_changed":
             case "subscription_updated": {
+                if (!variantId) {
+                    console.error(`No variant ID in ${eventName}`);
+                    break;
+                }
                 const plan = getPlanByVariantId(variantId);
 
                 // Fetch current sub to see if the plan is changing
@@ -102,12 +120,17 @@ export async function POST(request: Request) {
                     updateData.credits_per_period = plan.credits;
                     updateData.price_cents = plan.priceCents;
 
-                    // Calculate if this is an Upgrade (compare prices)
+                    // 1. Calculate if this is an Upgrade (compare prices)
                     const oldPlan = currentSub ? getPlanByVariantId(currentSub.ls_variant_id) : null;
                     const isUpgrade = oldPlan && plan.priceCents > oldPlan.priceCents;
 
-                    // Only grant new credits immediately if it's an UPGRADE
-                    if (currentSub && currentSub.ls_variant_id !== variantId && isUpgrade) {
+                    // 2. Only grant new credits if:
+                    // - It's a price upgrade
+                    // - AND the variant in our DB is actually different (hasn't been updated yet)
+                    // This prevents the 10:06:33, 10:06:35, 10:06:37 burst from triple-crediting.
+                    const isAlreadyProcessed = currentSub && currentSub.ls_variant_id === variantId;
+
+                    if (currentSub && !isAlreadyProcessed && isUpgrade) {
                         const creditDiff = plan.credits - (oldPlan?.credits || 0);
                         if (creditDiff > 0) {
                             await addCredits(
@@ -136,18 +159,30 @@ export async function POST(request: Request) {
 
             case "subscription_payment_success": {
                 // IMPORTANT: Only grant credits on "renewal" payments.
-                // Initial creation credits are handled in 'subscription_created'.
-                // Upgrades are handled immediately in 'subscription_updated'.
-                const plan = getPlanByVariantId(variantId);
                 const billingReason = attributes?.billing_reason;
 
-                if (plan && billingReason === "renewal") {
-                    await addCredits(
-                        userId,
-                        plan.credits,
-                        "subscription",
-                        `${plan.name} subscription renewed – ${plan.credits} credits`
-                    );
+                // For invoices, LS doesn't always send the variant_id in attributes.
+                // We fetch it from our DB to be sure.
+                let effectiveVariantId = variantId;
+                if (!effectiveVariantId) {
+                    const { data: existingSub } = await supabase
+                        .from("subscriptions")
+                        .select("ls_variant_id")
+                        .eq("ls_subscription_id", subscriptionId)
+                        .maybeSingle();
+                    effectiveVariantId = existingSub?.ls_variant_id;
+                }
+
+                if (effectiveVariantId) {
+                    const plan = getPlanByVariantId(effectiveVariantId);
+                    if (plan && billingReason === "renewal") {
+                        await addCredits(
+                            userId,
+                            plan.credits,
+                            "subscription",
+                            `${plan.name} subscription renewed – ${plan.credits} credits`
+                        );
+                    }
                 }
 
                 // Always update the period end date regardless of billing reason
