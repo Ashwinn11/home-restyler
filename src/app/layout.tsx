@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SITE_URL } from "@/lib/seo";
+import AuthProvider from "@/components/AuthProvider";
+import Navbar from "@/components/Navbar";
+import ToastProvider from "@/components/ToastProvider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Room Restyler",
+  title: "Home Restyler",
   description:
-    "Reimagine any room in a new design style, powered by AI",
+    "Restyle any room instantly with AI-powered interior design. Upload a photo, pick a style, and transform your space.",
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [{ url: "/icon.png", type: "image/png" }],
@@ -34,7 +37,12 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body bg-ink text-parchment antialiased grain">
-        {children}
+        <AuthProvider>
+          <ToastProvider>
+            <Navbar />
+            <main className="pt-14">{children}</main>
+          </ToastProvider>
+        </AuthProvider>
       </body>
     </html>
   );

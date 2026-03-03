@@ -4,8 +4,12 @@ import {
   generatePaintedImage,
 } from "@/lib/gemini";
 import type { AppMode } from "@/lib/types";
+import { authenticateAndCharge, chargeActionCredits } from "@/lib/api-auth";
 
 export async function POST(req: NextRequest) {
+  const { userId, response: authError } = await authenticateAndCharge(1);
+  if (authError) return authError;
+
   try {
     const { image, mimeType, style, customPrompt, mode, colorHex, finish } =
       await req.json();
@@ -20,7 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     const mime = mimeType || "image/jpeg";
-    let result: { image: string; text?: string; modelParts: unknown[] };
+    let result: { image: string; text?: string; modelParts: unknown[]; tokenCount: number };
 
     switch (appMode) {
       case "paint":
@@ -49,10 +53,15 @@ export async function POST(req: NextRequest) {
         break;
     }
 
+    // Fixed credit deduction (Follows Mascot economy)
+    const action = appMode === "paint" ? "paint" : "restyle";
+    await chargeActionCredits(userId, action, `${style || colorHex}`);
+
     return NextResponse.json({
       image: result.image,
       text: result.text,
       modelParts: result.modelParts,
+      creditsUsed: result.tokenCount,
     });
   } catch (error) {
     console.error("Restyle error:", error);

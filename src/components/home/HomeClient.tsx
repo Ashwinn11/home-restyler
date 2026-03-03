@@ -1,584 +1,73 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
-import GeneratingOverlay from "@/components/GeneratingOverlay";
-import AppWorkspace from "@/components/home/AppWorkspace";
+import { useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import MarketingLanding from "@/components/home/MarketingLanding";
-import type {
-  AppMode,
-  ChatMessage,
-  ConversationTurn,
-  ElementFilter,
-  MoodBoardData,
-  Snapshot,
-} from "@/lib/types";
+import { useAuth } from "@/components/AuthProvider";
 
-export default function HomeClient() {
-  const brandIcon = "/icon.png";
+function HomeInner() {
+  const searchParams = useSearchParams();
+  const { openAuthModal, user } = useAuth();
 
-  const [originalImage, setOriginalImage] = useState("");
-  const [originalMimeType, setOriginalMimeType] = useState("");
-  const [restyledImage, setRestyledImage] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [error, setError] = useState("");
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-  const [currentStyle, setCurrentStyle] = useState("");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-
-  const [mode, setMode] = useState<AppMode>("restyle");
-
-  const [paintColor, setPaintColor] = useState("");
-  const [paintFinish, setPaintFinish] = useState("Matte");
-
-  const [variations, setVariations] = useState<
-    { image: string; text?: string }[]
-  >([]);
-  const [showVariations, setShowVariations] = useState(false);
-  const [variationsLoading, setVariationsLoading] = useState(false);
-  const [selectedVariation, setSelectedVariation] = useState<number | null>(
-    null
-  );
-
-  const [moodBoard, setMoodBoard] = useState<MoodBoardData | null>(null);
-  const [moodBoardLoading, setMoodBoardLoading] = useState(false);
-
-  const [versions, setVersions] = useState<Snapshot[]>([]);
-  const [versionIndex, setVersionIndex] = useState(-1);
-
-  const conversationHistory = useRef<ConversationTurn[]>([]);
-  const styleRequestId = useRef(0);
-
-  const resetGenerationState = useCallback(() => {
-    setRestyledImage("");
-    setChatMessages([]);
-    setError("");
-    setCurrentStyle("");
-    setSuggestions([]);
-    setVersions([]);
-    setVersionIndex(-1);
-    setVariations([]);
-    setShowVariations(false);
-    setSelectedVariation(null);
-    setMoodBoard(null);
-    setMoodBoardLoading(false);
-    conversationHistory.current = [];
-  }, []);
-
-  const handleImageSelected = useCallback(
-    (base64: string, mimeType: string) => {
-      styleRequestId.current += 1;
-      setOriginalImage(base64);
-      setOriginalMimeType(mimeType);
-      resetGenerationState();
-    },
-    [resetGenerationState]
-  );
-
-  const handleModeChange = useCallback(
-    (newMode: AppMode) => {
-      setMode(newMode);
-      resetGenerationState();
-    },
-    [resetGenerationState]
-  );
-
-  const fetchMoodBoard = useCallback((imageData: string, requestId: number) => {
-    setMoodBoardLoading(true);
-    void (async () => {
-      try {
-        const res = await fetch("/api/moodboard", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ image: imageData, mimeType: "image/png" }),
-        });
-        if (!res.ok || requestId !== styleRequestId.current) return;
-        const data = await res.json();
-        if (requestId === styleRequestId.current) {
-          setMoodBoard(data);
-        }
-      } catch {
-        // Mood board is optional.
-      } finally {
-        if (requestId === styleRequestId.current) {
-          setMoodBoardLoading(false);
-        }
-      }
-    })();
-  }, []);
-
-  const handleStyleSelected = useCallback(
-    async (style: string, customPrompt?: string) => {
-      if (!originalImage) return;
-      const requestId = ++styleRequestId.current;
-      setIsGenerating(true);
-      setError("");
-      resetGenerationState();
-      setCurrentStyle(style);
-
-      try {
-        const body: Record<string, string> = {
-          image: originalImage,
-          mimeType: originalMimeType,
-          style,
-          mode,
-        };
-        if (customPrompt) body.customPrompt = customPrompt;
-
-        const res = await fetch("/api/restyle", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Generation failed");
-        if (requestId !== styleRequestId.current) return;
-        setRestyledImage(data.image);
-
-        const initialHistory = [
-          {
-            role: "user",
-            parts: [
-              {
-                inlineData: {
-                  mimeType: originalMimeType,
-                  data: originalImage,
-                },
-              },
-              {
-                text: `Restyle this room in ${style} style.`,
-              },
-            ],
-          },
-        ];
-        conversationHistory.current = initialHistory;
-
-        const initialMessages: ChatMessage[] = data.text
-          ? [{ role: "assistant", text: data.text }]
-          : [];
-        setChatMessages(initialMessages);
-
-        setVersions([
-          {
-            image: data.image,
-            messages: initialMessages,
-            history: [...initialHistory],
-          },
-        ]);
-        setVersionIndex(-1);
-
-        void (async () => {
-          try {
-            const suggestionsRes = await fetch("/api/suggestions", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                image: data.image,
-                mimeType: "image/png",
-                style,
-                customPrompt,
-              }),
-            });
-            if (!suggestionsRes.ok || requestId !== styleRequestId.current) {
-              return;
-            }
-            const suggestionsData = await suggestionsRes.json();
-            if (
-              requestId === styleRequestId.current &&
-              suggestionsData.suggestions
-            ) {
-              setSuggestions(suggestionsData.suggestions);
-            }
-          } catch {
-            // Suggestions are optional.
-          }
-        })();
-
-        fetchMoodBoard(data.image, requestId);
-      } catch (err) {
-        if (requestId !== styleRequestId.current) return;
-        setError(err instanceof Error ? err.message : "Something went wrong");
-      } finally {
-        if (requestId === styleRequestId.current) {
-          setIsGenerating(false);
-        }
-      }
-    },
-    [
-      originalImage,
-      originalMimeType,
-      mode,
-      resetGenerationState,
-      fetchMoodBoard,
-    ]
-  );
-
-  const handlePaintSelected = useCallback(
-    async (colorHex: string, finish: string) => {
-      setPaintColor(colorHex);
-      setPaintFinish(finish);
-
-      if (!originalImage) return;
-      const requestId = ++styleRequestId.current;
-      setIsGenerating(true);
-      setError("");
-      setRestyledImage("");
-      setChatMessages([]);
-      setSuggestions([]);
-      setVersions([]);
-      setVersionIndex(-1);
-      setVariations([]);
-      setShowVariations(false);
-      setSelectedVariation(null);
-      setMoodBoard(null);
-      setCurrentStyle(`${colorHex} ${finish}`);
-      conversationHistory.current = [];
-
-      try {
-        const res = await fetch("/api/restyle", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            image: originalImage,
-            mimeType: originalMimeType,
-            mode: "paint",
-            colorHex,
-            finish,
-          }),
-        });
-
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Generation failed");
-        if (requestId !== styleRequestId.current) return;
-        setRestyledImage(data.image);
-      } catch (err) {
-        if (requestId !== styleRequestId.current) return;
-        setError(err instanceof Error ? err.message : "Something went wrong");
-      } finally {
-        if (requestId === styleRequestId.current) {
-          setIsGenerating(false);
-        }
-      }
-    },
-    [originalImage, originalMimeType]
-  );
-
-  const hasEditsAfterVariation =
-    variations.length > 0 && selectedVariation !== null && versions.length > 1;
-
-  const handleGenerateVariations = useCallback(async () => {
-    if (!originalImage) return;
-
-    if (hasEditsAfterVariation) {
-      const confirmed = window.confirm(
-        "You have chat edits on this variation. Regenerating will discard them and create 4 fresh options from your original image. Continue?"
-      );
-      if (!confirmed) return;
+  // Open auth modal when redirected from protected pages or /login
+  useEffect(() => {
+    if (searchParams.get("modal") === "auth" && !user) {
+      openAuthModal();
     }
-
-    setVariationsLoading(true);
-    setShowVariations(true);
-    setSelectedVariation(null);
-    setVariations([]);
-
-    try {
-      const body: Record<string, string> = {
-        image: originalImage,
-        mimeType: originalMimeType,
-        mode,
-      };
-      if (mode === "paint") {
-        body.colorHex = paintColor;
-        body.finish = paintFinish;
-      } else {
-        body.style = currentStyle;
-      }
-
-      const res = await fetch("/api/variations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Generation failed");
-      setVariations(data.variations || []);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to generate variations"
-      );
-      setShowVariations(false);
-    } finally {
-      setVariationsLoading(false);
-    }
-  }, [
-    originalImage,
-    originalMimeType,
-    mode,
-    currentStyle,
-    paintColor,
-    paintFinish,
-    hasEditsAfterVariation,
-  ]);
-
-  const handleVariationSelect = useCallback(
-    (variation: { image: string; text?: string }) => {
-      const idx = variations.indexOf(variation);
-      setSelectedVariation(idx);
-      setRestyledImage(variation.image);
-      setShowVariations(false);
-
-      const initialMessages: ChatMessage[] = variation.text
-        ? [{ role: "assistant", text: variation.text }]
-        : [];
-      setChatMessages(initialMessages);
-
-      const initialHistory = [
-        {
-          role: "user",
-          parts: [
-            {
-              inlineData: {
-                mimeType: originalMimeType,
-                data: originalImage,
-              },
-            },
-            { text: `Selected variation for ${currentStyle}.` },
-          ],
-        },
-      ];
-      conversationHistory.current = initialHistory;
-
-      setVersions([
-        {
-          image: variation.image,
-          messages: initialMessages,
-          history: [...initialHistory],
-        },
-      ]);
-      setVersionIndex(-1);
-
-      fetchMoodBoard(variation.image, styleRequestId.current);
-    },
-    [variations, originalMimeType, originalImage, currentStyle, fetchMoodBoard]
-  );
-
-  const handleBackToVariations = useCallback(() => {
-    setShowVariations(true);
-  }, []);
-
-  const canUndo =
-    versionIndex > 0 || (versionIndex === -1 && versions.length > 0);
-  const canRedo = versionIndex >= 0 && versionIndex < versions.length - 1;
-
-  const navigateVersion = useCallback(
-    (index: number) => {
-      const snap = versions[index];
-      if (!snap) return;
-      setVersionIndex(index);
-      setRestyledImage(snap.image);
-      setChatMessages(snap.messages);
-      conversationHistory.current = [...snap.history];
-    },
-    [versions]
-  );
-
-  const handleUndo = useCallback(() => {
-    if (!canUndo) return;
-    const target = versionIndex === -1 ? versions.length - 2 : versionIndex - 1;
-    if (target >= 0) navigateVersion(target);
-  }, [canUndo, versionIndex, versions.length, navigateVersion]);
-
-  const handleRedo = useCallback(() => {
-    if (!canRedo) return;
-    navigateVersion(versionIndex + 1);
-  }, [canRedo, versionIndex, navigateVersion]);
-
-  const handleRefine = useCallback(
-    async (message: string, elementFilter?: ElementFilter) => {
-      if (!restyledImage) return;
-
-      const currentVersions =
-        versionIndex === -1 ? versions : versions.slice(0, versionIndex + 1);
-
-      const snapshot: Snapshot = {
-        image: restyledImage,
-        messages: [...chatMessages],
-        history: [...conversationHistory.current],
-      };
-      const newVersions = [...currentVersions, snapshot];
-
-      setChatMessages((prev) => [...prev, { role: "user", text: message }]);
-      setIsGenerating(true);
-      setError("");
-
-      try {
-        const res = await fetch("/api/refine", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            history: conversationHistory.current,
-            message,
-            currentImage: restyledImage,
-            currentImageMimeType: "image/png",
-            elementFilter: elementFilter || null,
-          }),
-        });
-
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Refinement failed");
-
-        conversationHistory.current.push({
-          role: "user",
-          parts: [
-            { inlineData: { mimeType: "image/png", data: restyledImage } },
-            { text: `Edit this room image: ${message}` },
-          ],
-        });
-
-        const newMessages = data.text
-          ? [
-            ...chatMessages,
-            { role: "user" as const, text: message },
-            { role: "assistant" as const, text: data.text },
-          ]
-          : [...chatMessages, { role: "user" as const, text: message }];
-
-        const resultSnapshot: Snapshot = {
-          image: data.image,
-          messages: newMessages,
-          history: [
-            ...conversationHistory.current,
-            {
-              role: "user",
-              parts: [
-                {
-                  inlineData: { mimeType: "image/png", data: restyledImage },
-                },
-                { text: `Edit this room image: ${message}` },
-              ],
-            },
-          ],
-        };
-
-        conversationHistory.current = resultSnapshot.history;
-        setRestyledImage(data.image);
-        setChatMessages(newMessages);
-        setVersions([...newVersions, resultSnapshot]);
-        setVersionIndex(-1);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Something went wrong");
-        setChatMessages((prev) => [
-          ...prev,
-          { role: "assistant", text: "Failed to refine. Try again." },
-        ]);
-        setVersions(currentVersions);
-      } finally {
-        setIsGenerating(false);
-      }
-    },
-    [restyledImage, chatMessages, versions, versionIndex]
-  );
-
-  const overlayText = variationsLoading
-    ? "Generating variations"
-    : restyledImage
-      ? "Refining your room"
-      : mode === "paint"
-        ? "Painting your walls"
-        : "Restyling your room";
+  }, [searchParams, openAuthModal, user]);
 
   return (
     <main className="min-h-screen bg-ink flex flex-col">
-      {/* ═══ HEADER ═══ */}
-      <header className="sticky top-0 z-30 border-b border-parchment-faint/12 bg-ink/90 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 border border-gold/30 rounded-sm flex items-center justify-center bg-ink-elevated relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <img src={brandIcon} alt="" className="w-full h-full object-cover" />
-            </div>
-            <div className="flex items-center gap-3">
-              <p className="font-display text-2xl sm:text-3xl font-medium tracking-tight text-parchment">
-                Room Restyler
-              </p>
-              <span className="hidden sm:block w-px h-5 bg-gold/30" />
-              <p className="hidden sm:block text-parchment-muted text-[11px] tracking-wide font-light">
-                AI Design Studio
-              </p>
-            </div>
-          </div>
-          <a
-            href="#app-workspace"
-            className="px-5 py-2.5 inline-flex items-center justify-center bg-gold text-ink text-[10px] uppercase tracking-[0.18em] font-semibold hover:bg-gold-soft transition-all duration-300 hover:shadow-[0_0_16px_rgba(201,168,76,0.2)]"
-          >
-            Start Restyling
-          </a>
-        </div>
-      </header>
-
       <MarketingLanding />
 
-      <AppWorkspace
-        mode={mode}
-        onModeChange={handleModeChange}
-        originalImage={originalImage}
-        onImageSelected={handleImageSelected}
-        isGenerating={isGenerating}
-        error={error}
-        showVariations={showVariations}
-        variations={variations}
-        variationsLoading={variationsLoading}
-        selectedVariation={selectedVariation}
-        onVariationSelect={handleVariationSelect}
-        onStyleSelected={handleStyleSelected}
-        onPaintSelected={handlePaintSelected}
-        restyledImage={restyledImage}
-        currentStyle={currentStyle}
-        onGenerateVariations={handleGenerateVariations}
-        onBackToVariations={handleBackToVariations}
-        versions={versions}
-        versionIndex={versionIndex}
-        canUndo={canUndo}
-        canRedo={canRedo}
-        onUndo={handleUndo}
-        onRedo={handleRedo}
-        moodBoard={moodBoard}
-        moodBoardLoading={moodBoardLoading}
-        chatMessages={chatMessages}
-        suggestions={suggestions}
-        onRefine={handleRefine}
-      />
-
-      {(isGenerating || variationsLoading) && (
-        <GeneratingOverlay text={overlayText} />
-      )}
-
-      {/* ═══ FOOTER ═══ */}
+      {/* Footer */}
       <footer className="border-t border-parchment-faint/12 mt-auto bg-ink-raised">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid sm:grid-cols-2 gap-6 items-center">
-          <div className="flex items-start gap-5">
-            <div className="w-12 h-12 border border-gold/20 rounded-sm flex items-center justify-center bg-ink-raised shrink-0 overflow-hidden">
-              <img src={brandIcon} alt="" className="w-full h-full object-cover" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+          <div className="grid sm:grid-cols-3 gap-8">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 border border-gold/20 flex items-center justify-center bg-ink-raised shrink-0 overflow-hidden">
+                <img src="/icon.png" alt="" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <p className="font-display text-xl text-parchment font-medium">Home Restyler</p>
+                <div className="w-8 h-px bg-gold/40 mt-2" />
+                <p className="text-[10px] uppercase tracking-[0.2em] text-parchment-muted mt-2">
+                  AI Interior Design Studio
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="font-display text-2xl text-parchment font-medium">
-                Room Restyler
-              </p>
-              <div className="w-10 h-px bg-gold/40 mt-2" />
-              <p className="text-[10px] uppercase tracking-[0.2em] text-parchment-muted mt-3">
-                AI Interior Design Workflow
-              </p>
+
+            <div className="space-y-2">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-parchment-faint mb-3">Product</p>
+              <a href="/studio" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Studio</a>
+              <a href="/gallery" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Gallery</a>
+              <a href="/profile" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Profile</a>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-parchment-faint mb-3">Legal</p>
+              <a href="/privacy" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Privacy Policy</a>
+              <a href="/terms" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Terms of Service</a>
+              <a href="/refund-policy" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Refund Policy</a>
             </div>
           </div>
-          <div className="text-xs text-parchment-muted sm:text-right space-y-1.5 font-light">
-            <p>Upload. Restyle. Refine. Export.</p>
-            <p>
-              Powered by Gemini image generation and conversational editing.
+
+          <div className="mt-8 pt-6 border-t border-parchment-faint/8 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-[11px] text-parchment-faint font-light">© {new Date().getFullYear()} Home Restyler. All rights reserved.</p>
+            <p className="text-[11px] text-parchment-faint font-light">
+              Powered by Gemini AI
             </p>
           </div>
         </div>
       </footer>
     </main>
+  );
+}
+
+export default function HomeClient() {
+  return (
+    <Suspense fallback={null}>
+      <HomeInner />
+    </Suspense>
   );
 }

@@ -63,19 +63,19 @@ export default function MarketingLanding() {
           </div>
 
           <h1 className="font-display text-6xl sm:text-7xl lg:text-9xl leading-[0.85] text-parchment font-medium tracking-tight animate-reveal-up" style={{ animationDelay: '100ms' }}>
-            Conceptualize <br />
+            Restyle Any Room, <br />
             <span className="italic font-light text-gold text-[0.85em] -mt-2 inline-block">Instantly</span>.
           </h1>
 
           <div className="mt-12 max-w-2xl animate-reveal-up" style={{ animationDelay: '200ms' }}>
             <p className="text-lg sm:text-xl text-parchment-muted font-light leading-relaxed">
-              A high-fidelity spatial engine for architects, designers, and visionaries.
-              Transform raw photography into curated atelier concepts in seconds.
+              Upload a photo of any room and transform it with AI-powered interior design — in seconds.
+              Choose from 20+ room design styles, visualize new wall paint colors, and download your redesigned space.
             </p>
           </div>
 
           <div className="mt-16 flex flex-wrap justify-center gap-6 animate-reveal-up" style={{ animationDelay: '300ms' }}>
-            <a href="#app-workspace" className="group relative px-12 py-5 bg-gold text-ink text-[11px] uppercase tracking-[0.3em] font-bold overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.3)]">
+            <a href="/studio" className="group relative px-12 py-5 bg-gold text-ink text-[11px] uppercase tracking-[0.3em] font-bold overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.3)]">
               <span className="relative z-10">Enter the Studio</span>
               <div className="absolute inset-x-0 bottom-0 h-0.5 bg-ink group-hover:h-full transition-all duration-300 -z-0 opacity-5" />
             </a>
@@ -88,7 +88,7 @@ export default function MarketingLanding() {
           <div className="mt-28 w-full max-w-5xl aspect-[16/9] relative group animate-reveal-up" style={{ animationDelay: '400ms' }}>
             {/* Main Canvas */}
             <div className="absolute inset-0 bg-ink-raised border border-parchment-faint/15 shadow-[0_50px_120px_rgba(0,0,0,0.8)] overflow-hidden">
-              <img src="/hero-after.png" alt="Concept Visualization" className="w-full h-full object-cover p-2 lg:p-4 opacity-90 group-hover:scale-105 transition-transform duration-[4000ms] " />
+              <img src="/hero-after.png" alt="AI room design — living room transformed from photo into modern interior style" className="w-full h-full object-cover p-2 lg:p-4 opacity-90 group-hover:scale-105 transition-transform duration-[4000ms] " />
               {/* Gold Frame Interface */}
               <div className="absolute inset-8 border border-gold/15 pointer-events-none group-hover:border-gold/30 transition-colors" />
             </div>
@@ -265,7 +265,7 @@ export default function MarketingLanding() {
             </h2>
             <div className="p-10 border border-gold/20 bg-gold/5 backdrop-blur-md rounded-lg max-w-sm group hover:border-gold/40 transition-all duration-500">
               <p className="font-display text-2xl text-parchment font-medium italic mb-6">Ready to restyle your world?</p>
-              <a href="#app-workspace" className="inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] font-bold text-gold group-hover:text-gold-soft transition-colors">
+              <a href="/studio" className="inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] font-bold text-gold group-hover:text-gold-soft transition-colors">
                 Open The Studio
                 <svg className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </a>

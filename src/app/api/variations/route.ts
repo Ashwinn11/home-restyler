@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateRestyledImage } from "@/lib/gemini";
+import { authenticateAndCharge, chargeActionCredits } from "@/lib/api-auth";
 
 export async function POST(req: NextRequest) {
+  // Pre-check minimum 1 credit before generating variations
+  const { userId, response: authError } = await authenticateAndCharge(1);
+  if (authError) return authError;
+
   try {
     const { image, mimeType, style, customPrompt } = await req.json();
 
@@ -21,12 +26,14 @@ export async function POST(req: NextRequest) {
       generateRestyledImage(image, mime, style, customPrompt),
     ]);
 
+    let totalTokens = 0;
     const variations = results
       .filter((r) => r.status === "fulfilled")
       .map((r) => {
         const val = (
-          r as PromiseFulfilledResult<{ image: string; text?: string }>
+          r as PromiseFulfilledResult<{ image: string; text?: string; tokenCount: number }>
         ).value;
+        totalTokens += val.tokenCount;
         return { image: val.image, text: val.text };
       });
 
@@ -37,7 +44,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return NextResponse.json({ variations });
+    // Fixed credit deduction (Follows Mascot economy)
+    await chargeActionCredits(userId, "variations", `${style} (${variations.length}x)`);
+
+    return NextResponse.json({ variations, creditsUsed: totalTokens });
   } catch (error) {
     console.error("Variations error:", error);
     return NextResponse.json(

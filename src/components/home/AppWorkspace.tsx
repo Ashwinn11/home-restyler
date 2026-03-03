@@ -6,6 +6,7 @@ import BeforeAfter from "@/components/BeforeAfter";
 import ChatRefine from "@/components/ChatRefine";
 import VariationsGrid from "@/components/VariationsGrid";
 import DownloadButton from "@/components/DownloadButton";
+import SaveToGalleryButton from "@/components/SaveToGalleryButton";
 import MoodBoard from "@/components/MoodBoard";
 import type {
   AppMode,
@@ -213,7 +214,7 @@ export default function AppWorkspace({
                       <button
                         onClick={onBackToVariations}
                         title="Go back to the 2x2 grid to pick a different variation"
-                        className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink rounded-full hover:border-gold/50 hover:bg-gold/8 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold/40"
+                        className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink hover:border-gold/50 hover:bg-gold/8 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold/40"
                       >
                         <svg
                           className="w-3.5 h-3.5"
@@ -239,7 +240,7 @@ export default function AppWorkspace({
                           ? "Discard current variations and generate 4 new ones from scratch"
                           : "Generate 4 different AI interpretations of this style to choose from"
                       }
-                      className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink rounded-full hover:border-olive/60 hover:bg-olive/12 transition-all duration-200 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-olive/40"
+                      className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink hover:border-olive/60 hover:bg-olive/12 transition-all duration-200 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-olive/40"
                     >
                       <svg
                         className="w-3.5 h-3.5"
@@ -263,13 +264,19 @@ export default function AppWorkspace({
 
                 <div className="flex items-center gap-2">
                   <DownloadButton image={restyledImage} />
+                  <SaveToGalleryButton
+                    image={restyledImage}
+                    originalImage={originalImage}
+                    style={currentStyle}
+                    metadata={{ mode }}
+                  />
 
                   {versions.length > 0 && mode !== "paint" && (
                     <>
                       <button
                         onClick={onUndo}
                         disabled={!canUndo}
-                        className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink rounded-full hover:border-gold/50 hover:bg-gold/8 transition-all duration-200 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gold/40"
+                        className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink hover:border-gold/50 hover:bg-gold/8 transition-all duration-200 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gold/40"
                       >
                         <svg
                           className="w-3.5 h-3.5"
@@ -289,7 +296,7 @@ export default function AppWorkspace({
                       <button
                         onClick={onRedo}
                         disabled={!canRedo}
-                        className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink rounded-full hover:border-gold/50 hover:bg-gold/8 transition-all duration-200 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gold/40"
+                        className="flex items-center gap-1.5 px-3.5 py-2 text-xs text-parchment border border-parchment-faint/25 bg-ink hover:border-gold/50 hover:bg-gold/8 transition-all duration-200 cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gold/40"
                       >
                         Redo
                         <svg

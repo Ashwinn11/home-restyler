@@ -35,7 +35,7 @@ export default function OpenGraphImage() {
               color: "#C9A84C",
             }}
           >
-            Room Restyler
+            Home Restyler
           </div>
         </div>
 

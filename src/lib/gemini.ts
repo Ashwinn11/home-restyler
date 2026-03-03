@@ -75,7 +75,7 @@ export async function generateSuggestions(
   imageBase64: string,
   mimeType: string,
   style: string
-): Promise<string[]> {
+): Promise<{ suggestions: string[]; tokenCount: number }> {
   const response = await ai.models.generateContent({
     model: PROMPT_MODEL,
     contents: [
@@ -94,8 +94,9 @@ export async function generateSuggestions(
     },
   });
 
+  const tokenCount = response.usageMetadata?.totalTokenCount ?? 0;
   const text = response.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-  if (!text) return [];
+  if (!text) return { suggestions: [], tokenCount };
 
   try {
     // Strip markdown code fences if present
@@ -106,12 +107,12 @@ export async function generateSuggestions(
     }
     const parsed = JSON.parse(cleaned);
     if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed.slice(0, 4).map(String);
+      return { suggestions: parsed.slice(0, 4).map(String), tokenCount };
     }
   } catch {
     // Fallback if JSON parsing fails
   }
-  return [];
+  return { suggestions: [], tokenCount };
 }
 
 // ---------------------------------------------------------------------------
@@ -126,7 +127,7 @@ export async function generateRestyledImage(
   mimeType: string,
   style: string,
   customPrompt?: string
-): Promise<{ image: string; text?: string; modelParts: RawPart[] }> {
+): Promise<{ image: string; text?: string; modelParts: RawPart[]; tokenCount: number }> {
   const styleDirective = customPrompt
     ? `Restyle this room in "${style}" style with these user preferences: ${customPrompt}.`
     : `Restyle this room in "${style}" style.`;
@@ -168,7 +169,7 @@ export async function generateRefinedImage(
   currentImageBase64: string,
   currentImageMimeType: string,
   elementFilter?: ElementFilter
-): Promise<{ image: string; text?: string }> {
+): Promise<{ image: string; text?: string; tokenCount: number }> {
   // Keep refine single-turn against the latest image only.
   // Replaying older image turns can cause the model to recompose camera framing.
   void history;
@@ -203,8 +204,8 @@ export async function generateRefinedImage(
     },
   });
 
-  const { image, text } = extractImageFromResponse(response);
-  return { image, text };
+  const { image, text, tokenCount } = extractImageFromResponse(response);
+  return { image, text, tokenCount };
 }
 
 // ---------------------------------------------------------------------------
@@ -221,7 +222,7 @@ export async function generateStagedImage(
   mimeType: string,
   style: string,
   customPrompt?: string
-): Promise<{ image: string; text?: string; modelParts: RawPart[] }> {
+): Promise<{ image: string; text?: string; modelParts: RawPart[]; tokenCount: number }> {
   const styleDirective = customPrompt
     ? `Furnish this empty room in "${style}" style with these preferences: ${customPrompt}.`
     : `Furnish this empty room in "${style}" style.`;
@@ -262,7 +263,7 @@ export async function generatePaintedImage(
   mimeType: string,
   colorHex: string,
   finish: string
-): Promise<{ image: string; text?: string; modelParts: RawPart[] }> {
+): Promise<{ image: string; text?: string; modelParts: RawPart[]; tokenCount: number }> {
   const response = await ai.models.generateContent({
     model: IMAGE_MODEL,
     contents: [
@@ -292,7 +293,7 @@ export async function generatePaintedImage(
 export async function generateMoodBoard(
   imageBase64: string,
   mimeType: string
-): Promise<MoodBoardData> {
+): Promise<MoodBoardData & { tokenCount: number }> {
   const response = await ai.models.generateContent({
     model: PROMPT_MODEL,
     contents: [
@@ -318,9 +319,10 @@ Include 4-6 dominant colors, 3-5 materials, and 2-4 furniture style descriptors.
     },
   });
 
+  const tokenCount = response.usageMetadata?.totalTokenCount ?? 0;
   const text = response.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
   if (!text) {
-    return { colors: [], materials: [], furnitureStyles: [], summary: "" };
+    return { colors: [], materials: [], furnitureStyles: [], summary: "", tokenCount };
   }
 
   try {
@@ -329,9 +331,10 @@ Include 4-6 dominant colors, 3-5 materials, and 2-4 furniture style descriptors.
       cleaned = cleaned.split("\n").slice(1).join("\n");
       cleaned = cleaned.replace(/```\s*$/, "").trim();
     }
-    return JSON.parse(cleaned) as MoodBoardData;
+    const parsed = JSON.parse(cleaned) as MoodBoardData;
+    return { ...parsed, tokenCount };
   } catch {
-    return { colors: [], materials: [], furnitureStyles: [], summary: text };
+    return { colors: [], materials: [], furnitureStyles: [], summary: text, tokenCount };
   }
 }
 
@@ -344,8 +347,10 @@ function extractImageFromResponse(response: any): {
   image: string;
   text?: string;
   modelParts: RawPart[];
+  tokenCount: number;
 } {
   const parts = response.candidates?.[0]?.content?.parts ?? [];
+  const tokenCount = response.usageMetadata?.totalTokenCount ?? 0;
   let image = "";
   let text = "";
 
@@ -363,5 +368,5 @@ function extractImageFromResponse(response: any): {
   }
 
   // Return raw parts with thought_signatures preserved for multi-turn
-  return { image, text: text || undefined, modelParts: parts };
+  return { image, text: text || undefined, modelParts: parts, tokenCount };
 }

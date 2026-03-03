@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Room Restyler",
+    name: "Home Restyler",
     short_name: "Restyler",
     description:
       "AI interior design app to restyle rooms, visualize paint, and generate design variations.",

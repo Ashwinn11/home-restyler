@@ -2,22 +2,25 @@ import type { Metadata } from "next";
 import HomeClient from "@/components/home/HomeClient";
 import { SITE_URL, absoluteUrl } from "@/lib/seo";
 
-const pageTitle = "Room Restyler | AI Interior Design & Virtual Room Makeovers";
+const pageTitle = "AI Room Design & Interior Redesign | Home Restyler";
 const pageDescription =
-  "Restyle any room from one photo. Generate interior design concepts, test paint colors, refine with chat, and export presentation-ready visuals in minutes.";
+  "Transform any room with AI-powered interior design. Upload a photo, choose from 20+ design styles, visualize wall paint colors, and download your redesigned room in minutes. Free to try.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: pageTitle,
   description: pageDescription,
   keywords: [
-    "room restyler",
-    "ai interior design",
+    "AI room design",
+    "AI interior design",
+    "room redesign AI",
+    "room interior design app",
     "virtual room makeover",
-    "room design generator",
-    "ai room redesign",
+    "home restyler",
     "paint color visualizer",
-    "interior design app",
+    "interior design generator",
+    "room design from photo",
+    "AI home design",
   ],
   alternates: {
     canonical: absoluteUrl("/"),
@@ -27,13 +30,13 @@ export const metadata: Metadata = {
     title: pageTitle,
     description: pageDescription,
     url: absoluteUrl("/"),
-    siteName: "Room Restyler",
+    siteName: "Home Restyler",
     images: [
       {
         url: absoluteUrl("/opengraph-image"),
         width: 1200,
         height: 630,
-        alt: "Room Restyler AI interior design app",
+        alt: "Home Restyler AI room design app",
       },
     ],
   },
@@ -91,14 +94,14 @@ const faqSchema = {
 const softwareAppSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Room Restyler",
+  name: "Home Restyler",
   url: absoluteUrl("/"),
   applicationCategory: "DesignApplication",
   operatingSystem: "Web",
   description: pageDescription,
   publisher: {
     "@type": "Organization",
-    name: "Room Restyler",
+    name: "Home Restyler",
     url: absoluteUrl("/"),
   },
   offers: {
@@ -118,7 +121,7 @@ const softwareAppSchema = {
 const webSiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Room Restyler",
+  name: "Home Restyler",
   url: absoluteUrl("/"),
   description: pageDescription,
 };
@@ -126,7 +129,7 @@ const webSiteSchema = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Room Restyler",
+  name: "Home Restyler",
   url: absoluteUrl("/"),
   logo: absoluteUrl("/icon.png"),
   sameAs: [],
