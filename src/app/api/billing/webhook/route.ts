@@ -89,43 +89,24 @@ export async function POST(request: Request) {
                 break;
             }
 
-            case "subscription_plan_changed":
-            case "subscription_updated": {
-                if (!variantId) {
-                    console.error(`No variant ID in ${eventName}`);
-                    break;
-                }
+            case "subscription_plan_changed": {
+                if (!variantId) break;
                 const plan = getPlanByVariantId(variantId);
 
                 // Fetch current sub to see if the plan is changing
                 const { data: currentSub } = await supabase
                     .from("subscriptions")
-                    .select("ls_variant_id, plan_name")
+                    .select("ls_variant_id")
                     .eq("ls_subscription_id", subscriptionId)
                     .maybeSingle();
 
-                const updateData: Record<string, unknown> = {
-                    status: mapLsStatus(status),
-                    updated_at: new Date().toISOString(),
-                };
-
-                if (plan) {
-                    updateData.ls_variant_id = variantId;
-                    updateData.plan_name = plan.slug;
-                    updateData.credits_per_period = plan.credits;
-                    updateData.price_cents = plan.priceCents;
-
-                    // 1. Calculate if this is an Upgrade (compare prices)
-                    const oldPlan = currentSub ? getPlanByVariantId(currentSub.ls_variant_id) : null;
+                if (plan && currentSub) {
+                    const oldPlan = getPlanByVariantId(currentSub.ls_variant_id);
                     const isUpgrade = oldPlan && plan.priceCents > oldPlan.priceCents;
+                    const isNewVariant = currentSub.ls_variant_id !== variantId;
 
-                    // 2. Only grant new credits if:
-                    // - It's a price upgrade
-                    // - AND the variant in our DB is actually different (hasn't been updated yet)
-                    // This prevents the 10:06:33, 10:06:35, 10:06:37 burst from triple-crediting.
-                    const isAlreadyProcessed = currentSub && currentSub.ls_variant_id === variantId;
-
-                    if (currentSub && !isAlreadyProcessed && isUpgrade) {
+                    // Grant credits ONLY if it's a price upgrade and its a new variant
+                    if (isNewVariant && isUpgrade) {
                         const creditDiff = plan.credits - (oldPlan?.credits || 0);
                         if (creditDiff > 0) {
                             await addCredits(
@@ -135,6 +116,38 @@ export async function POST(request: Request) {
                                 `Upgraded to ${plan.name} – ${creditDiff} incremental credits added`
                             );
                         }
+                    }
+
+                    // Sync the new plan to DB immediately in this block too
+                    await supabase
+                        .from("subscriptions")
+                        .update({
+                            ls_variant_id: variantId,
+                            plan_name: plan.slug,
+                            credits_per_period: plan.credits,
+                            price_cents: plan.priceCents,
+                            updated_at: new Date().toISOString()
+                        })
+                        .eq("ls_subscription_id", subscriptionId);
+                }
+                break;
+            }
+
+            case "subscription_updated": {
+                // subscription_updated is now ONLY for metadata sync (status, dates).
+                // Credit logic is moved to plan_changed and payment_success.
+                const updateData: Record<string, unknown> = {
+                    status: mapLsStatus(status),
+                    updated_at: new Date().toISOString(),
+                };
+
+                if (variantId) {
+                    const plan = getPlanByVariantId(variantId);
+                    if (plan) {
+                        updateData.ls_variant_id = variantId;
+                        updateData.plan_name = plan.slug;
+                        updateData.credits_per_period = plan.credits;
+                        updateData.price_cents = plan.priceCents;
                     }
                 }
 
