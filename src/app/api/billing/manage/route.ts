@@ -28,7 +28,7 @@ export async function POST(request: Request) {
             .in("status", ["active", "past_due"])
             .order("created_at", { ascending: false })
             .limit(1)
-            .single();
+            .maybeSingle();
 
         if (!subscription) {
             return NextResponse.json(

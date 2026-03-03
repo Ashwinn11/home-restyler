@@ -46,9 +46,9 @@ const FAQS = [
 
 export default function MarketingLanding() {
   return (
-    <>
+    <main>
       {/* ═══ THE CINEMATIC HERO: "THE ATELIER" ═══ */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden border-b border-parchment-faint/10 py-20 px-4">
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-parchment-faint/10 py-16 px-4">
         {/* Immersive background elements */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(201,168,76,0.06),transparent_80%)]" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-gradient-to-b from-gold/30 via-gold/5 to-transparent z-0 opacity-40" />
@@ -88,7 +88,7 @@ export default function MarketingLanding() {
           <div className="mt-20 sm:mt-28 w-full max-w-5xl aspect-[16/9] relative group animate-reveal-up" style={{ animationDelay: '400ms' }}>
             {/* Main Canvas */}
             <div className="absolute inset-0 bg-ink-raised border border-parchment-faint/15 shadow-[0_50px_120px_rgba(0,0,0,0.8)] overflow-hidden">
-              <img src="/hero-after.png" alt="AI room design" className="w-full h-full object-cover p-1 sm:p-2 lg:p-4 opacity-90 group-hover:scale-105 transition-transform duration-[4000ms] " />
+              <img src="/hero-after.png" alt="AI interior design transformation after result" className="w-full h-full object-cover p-1 sm:p-2 lg:p-4 opacity-90 group-hover:scale-105 transition-transform duration-[4000ms] " />
               {/* Gold Frame Interface */}
               <div className="absolute inset-4 sm:inset-8 border border-gold/15 pointer-events-none group-hover:border-gold/30 transition-colors" />
             </div>
@@ -137,7 +137,7 @@ export default function MarketingLanding() {
                 </div>
               </div>
               <div className="relative w-full h-full overflow-hidden bg-ink">
-                <img src="/hero-before.png" alt="Source Photo" className="w-full h-full object-cover opacity-85" />
+                <img src="/hero-before.png" alt="Original room photo before AI redesign" className="w-full h-full object-cover opacity-85" />
               </div>
               <div className="pt-4 text-center">
                 <p className="font-display text-[10px] text-ink/40 tracking-[0.4em] uppercase font-bold">RAW__IMG_SOURCE</p>
@@ -205,14 +205,14 @@ export default function MarketingLanding() {
       </section>
 
       {/* ═══ THE WORKFLOW SPREAD ═══ */}
-      <section className="py-20 sm:py-40 bg-ink-raised border-y border-parchment-faint/10 relative">
+      <section className="py-16 sm:py-24 bg-ink-raised border-y border-parchment-faint/10 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-16 sm:mb-28">
-            <h2 className="font-display text-3xl sm:text-6xl text-parchment font-medium italic animate-reveal-up">Inside the Workflow</h2>
-            <div className="w-16 sm:w-24 h-px bg-gold mx-auto mt-6 sm:mt-8 animate-reveal-up" style={{ animationDelay: '100ms' }} />
+          <div className="text-center mb-16 sm:mb-20">
+            <h2 className="font-display text-3xl sm:text-5xl text-parchment font-medium italic animate-reveal-up">Inside the Workflow</h2>
+            <div className="w-16 sm:w-20 h-px bg-gold mx-auto mt-4 animate-reveal-up" style={{ animationDelay: '100ms' }} />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {[
               { title: "Sourcing", text: "Direct spatial analysis from raw photography. Any room, any lighting, any quality.", icon: "01" },
               { title: "Synthesis", text: "Atelier AI fuses your direction with architectural logic for the perfect render.", icon: "02" },
@@ -227,12 +227,12 @@ export default function MarketingLanding() {
                 {/* Connector line for desktop */}
                 {i < 3 && <div className="hidden lg:block absolute top-10 right-0 w-full h-px bg-parchment-faint/20 group-hover:bg-gold/30 transition-colors -z-0" />}
 
-                <div className="relative z-10 p-8 lg:p-4 hover:translate-y-[-8px] transition-transform duration-500">
-                  <div className="w-20 h-20 bg-ink border border-gold/20 flex items-center justify-center mb-10 transition-all duration-500 group-hover:border-gold/60 group-hover:shadow-[0_0_30px_rgba(201,168,76,0.15)] group-hover:rotate-45">
-                    <span className="font-display text-4xl text-gold/40 group-hover:text-gold group-hover:-rotate-45 transition-all">{step.icon}</span>
+                <div className="relative z-10 p-2 hover:translate-y-[-4px] transition-transform duration-500">
+                  <div className="w-12 h-12 bg-ink border border-gold/20 flex items-center justify-center mb-6 transition-all duration-500 group-hover:border-gold/60 group-hover:shadow-[0_0_20px_rgba(201,168,76,0.15)] group-hover:rotate-45">
+                    <span className="font-display text-xl text-gold/40 group-hover:text-gold group-hover:-rotate-45 transition-all">{step.icon}</span>
                   </div>
-                  <h3 className="font-display text-3xl text-parchment font-medium mb-4">{step.title}</h3>
-                  <p className="text-sm text-parchment-muted font-light leading-relaxed group-hover:text-parchment-muted/80">
+                  <h3 className="font-display text-xl text-parchment font-medium mb-3">{step.title}</h3>
+                  <p className="text-xs text-parchment-muted font-light leading-relaxed group-hover:text-parchment-muted/80">
                     {step.text}
                   </p>
                 </div>
@@ -243,15 +243,15 @@ export default function MarketingLanding() {
       </section>
 
       {/* ═══ FAQ & CLOSE: THE ARCHITECTURAL SPLIT ═══ */}
-      <section className="py-24 sm:py-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:grid lg:grid-cols-2 gap-32">
-          <div className="mb-20 lg:mb-0 animate-reveal-up">
-            <span className="text-[10px] uppercase tracking-[0.5em] text-gold font-bold mb-8 block">Inquiries</span>
-            <h2 className="font-display text-5xl sm:text-7xl text-parchment font-medium leading-[0.9] tracking-tight mb-12">
-              Frequently <br /> Asked <span className="text-gold italic">Questions</span>.
+      <section className="py-16 sm:py-24 border-b border-parchment-faint/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:grid lg:grid-cols-12 gap-12 lg:gap-20">
+          <div className="lg:col-span-5 mb-16 lg:mb-0 animate-reveal-up">
+            <span className="text-[10px] uppercase tracking-[0.5em] text-gold font-bold mb-6 block">Common Questions</span>
+            <h2 className="font-display text-4xl sm:text-6xl text-parchment font-medium leading-[0.9] tracking-tight mb-10">
+              Frequently <br /> <span className="text-gold italic">Asked Questions</span>.
             </h2>
-            <div className="p-10 border border-gold/20 bg-gold/5 backdrop-blur-md rounded-lg max-w-sm group hover:border-gold/40 transition-all duration-500">
-              <p className="font-display text-2xl text-parchment font-medium italic mb-6">Ready to restyle your world?</p>
+            <div className="p-8 border border-gold/20 bg-gold/5 backdrop-blur-md rounded-lg max-w-sm group hover:border-gold/40 transition-all duration-500">
+              <p className="font-display text-xl text-parchment font-medium italic mb-5">Ready to restyle your world?</p>
               <a href="/studio" className="inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] font-bold text-gold group-hover:text-gold-soft transition-colors">
                 Open The Studio
                 <svg className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -259,12 +259,11 @@ export default function MarketingLanding() {
             </div>
           </div>
 
-          <div className="space-y-16 animate-reveal-up" style={{ animationDelay: '200ms' }}>
+          <div className="lg:col-span-7 space-y-6 sm:space-y-8 animate-reveal-up" style={{ animationDelay: '200ms' }}>
             {FAQS.map((faq, i) => (
-              <div key={faq.q} className="group border-b border-parchment-faint/10 pb-12 hover:border-gold/30 transition-colors duration-500">
-                <span className="text-[10px] text-gold/40 font-bold mb-4 block group-hover:text-gold transition-colors">QUERY_0{i + 1}</span>
-                <h3 className="font-display text-3xl text-parchment font-medium mb-6 leading-tight group-hover:text-gold transition-colors">{faq.q}</h3>
-                <p className="text-lg text-parchment-muted font-light leading-relaxed group-hover:text-parchment/80 transition-colors duration-500">
+              <div key={faq.q} className="group border border-parchment-faint/10 p-6 sm:p-8 bg-ink-raised hover:border-gold/30 hover:bg-ink-elevated transition-all duration-500 rounded-lg">
+                <h3 className="font-display text-xl sm:text-2xl text-parchment font-medium mb-3 leading-tight group-hover:text-gold transition-colors">{faq.q}</h3>
+                <p className="text-sm sm:text-base text-parchment-muted font-light leading-relaxed group-hover:text-parchment/80 transition-colors duration-500">
                   {faq.a}
                 </p>
               </div>
@@ -283,6 +282,6 @@ export default function MarketingLanding() {
           animation: spin-slow 12s linear infinite;
         }
       `}</style>
-    </>
+    </main>
   );
 }
