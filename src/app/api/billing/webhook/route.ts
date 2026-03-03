@@ -83,14 +83,9 @@ export async function POST(request: Request) {
                     onConflict: "ls_subscription_id",
                 });
 
-                // Add credits
-                await addCredits(
-                    userId,
-                    plan.credits,
-                    "subscription",
-                    `${plan.name} plan activated – ${plan.credits} credits`
-                );
-
+                // NOTE: We don't add credits here anymore. 
+                // We wait for 'subscription_payment_success' with billing_reason: 'initial' 
+                // to ensure the credit grant only happens after successful payment.
                 break;
             }
 
@@ -175,12 +170,13 @@ export async function POST(request: Request) {
 
                 if (effectiveVariantId) {
                     const plan = getPlanByVariantId(effectiveVariantId);
-                    if (plan && billingReason === "renewal") {
+                    // Match Mascot: grant credits for both 'initial' purchase and 'renewal'
+                    if (plan && (billingReason === "initial" || billingReason === "renewal")) {
                         await addCredits(
                             userId,
                             plan.credits,
                             "subscription",
-                            `${plan.name} subscription renewed – ${plan.credits} credits`
+                            `${plan.name} subscription ${billingReason} – ${plan.credits} credits granted`
                         );
                     }
                 }
