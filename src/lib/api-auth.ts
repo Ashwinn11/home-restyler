@@ -2,14 +2,7 @@ import { createClient } from "@/lib/supabase-server";
 import { NextResponse } from "next/server";
 import { deductCredits, hasEnoughCredits, getActionCost } from "@/lib/credits";
 
-// ─── Token-to-credits conversion ─────────────────────────────────────────────
-// 1 credit = 1,000 tokens (rounded up, minimum 1 credit per call)
-const TOKENS_PER_CREDIT = 1000;
-
-export function tokensToCredits(tokenCount: number): number {
-    if (tokenCount <= 0) return 1; // minimum 1 credit
-    return Math.max(1, Math.ceil(tokenCount / TOKENS_PER_CREDIT));
-}
+// ─── Authentication & Credit Enforcement ───────────────────────────────────
 
 /**
  * Authenticate user and optionally pre-check a minimum credit balance.

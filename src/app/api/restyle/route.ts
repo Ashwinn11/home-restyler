@@ -7,14 +7,15 @@ import type { AppMode } from "@/lib/types";
 import { authenticateAndCharge, chargeActionCredits } from "@/lib/api-auth";
 
 export async function POST(req: NextRequest) {
-  const { userId, response: authError } = await authenticateAndCharge(1);
-  if (authError) return authError;
-
   try {
-    const { image, mimeType, style, customPrompt, mode, colorHex, finish } =
-      await req.json();
-
+    const body = await req.json();
+    const { image, mimeType, style, customPrompt, mode, colorHex, finish } = body;
     const appMode: AppMode = mode || "restyle";
+    const action = appMode === "paint" ? "paint" : "restyle";
+
+    // Pre-check for the specific action cost (5 credits)
+    const { userId, response: authError } = await authenticateAndCharge(5);
+    if (authError) return authError;
 
     if (!image) {
       return NextResponse.json(
@@ -54,7 +55,6 @@ export async function POST(req: NextRequest) {
     }
 
     // Fixed credit deduction (Follows Mascot economy)
-    const action = appMode === "paint" ? "paint" : "restyle";
     await chargeActionCredits(userId, action, `${style || colorHex}`);
 
     return NextResponse.json({

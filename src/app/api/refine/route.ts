@@ -3,7 +3,8 @@ import { generateRefinedImage } from "@/lib/gemini";
 import { authenticateAndCharge, chargeActionCredits } from "@/lib/api-auth";
 
 export async function POST(req: NextRequest) {
-  const { userId, response: authError } = await authenticateAndCharge(1);
+  // Pre-check for the specific action cost (5 credits)
+  const { userId, response: authError } = await authenticateAndCharge(5);
   if (authError) return authError;
 
   try {

@@ -3,9 +3,9 @@ import { createServiceClient } from "./supabase-server";
 // ─── Fixed Credit Economy (Following Mascot Strategy) ──────────────────────
 export const ACTION_COSTS: Record<string, number> = {
     restyle: 5,     // Standard full room redesign
-    paint: 3,       // Specific wall color change
-    refine: 3,      // Iterative follow-up editing
-    variations: 10, // Generating 4 different directions (Bulk)
+    paint: 5,       // Specific wall color change (Full image generation)
+    refine: 5,      // Iterative follow-up editing (Full image generation)
+    variations: 20, // Generating 4 different directions (4x Image cost)
     moodboard: 1,   // Text-only design extraction
     suggestions: 1, // AI-generated design refinements
 };
@@ -21,7 +21,7 @@ export async function getUserCredits(userId: string): Promise<number> {
         .from("user_credits")
         .select("credits")
         .eq("id", userId)
-        .single();
+        .maybeSingle();
 
     if (error || !data) return 0;
     return data.credits;
@@ -49,7 +49,7 @@ export async function deductCredits(
         .from("user_credits")
         .select("credits")
         .eq("id", userId)
-        .single();
+        .maybeSingle();
 
     if (fetchError || !current || current.credits < amount) {
         return { success: false, remaining: current?.credits ?? 0 };
@@ -96,7 +96,7 @@ export async function addCredits(
         .from("user_credits")
         .select("credits")
         .eq("id", userId)
-        .single();
+        .maybeSingle();
 
     const currentCredits = current?.credits ?? 0;
     const newBalance = currentCredits + amount;

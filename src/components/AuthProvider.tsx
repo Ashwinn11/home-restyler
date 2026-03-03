@@ -54,31 +54,45 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     const [subscription, setSubscription] = useState<Subscription | null>(null);
     const [loading, setLoading] = useState(true);
     const [authModalOpen, setAuthModalOpen] = useState(false);
-    const supabase = createClient();
+
+    // Memoize supabase client to prevent unnecessary re-creations
+    const [supabase] = useState(() => createClient());
 
     const openAuthModal = useCallback(() => setAuthModalOpen(true), []);
 
     const refreshCredits = useCallback(async () => {
         if (!user) return;
-        const { data } = await supabase
+        const { data, error } = await supabase
             .from("user_credits")
             .select("credits")
             .eq("id", user.id)
-            .single();
+            .maybeSingle(); // maybeSingle() handles 0 rows gracefully
+
+        if (error) {
+            console.error("Error fetching credits:", error);
+            return;
+        }
+
         if (data) setCredits(data.credits);
     }, [user, supabase]);
 
     const refreshSubscription = useCallback(async () => {
         if (!user) return;
-        const { data } = await supabase
+        const { data, error } = await supabase
             .from("subscriptions")
             .select("*")
             .eq("user_id", user.id)
             .in("status", ["active", "past_due"])
             .order("created_at", { ascending: false })
             .limit(1)
-            .single();
-        setSubscription(data);
+            .maybeSingle(); // maybeSingle() handles 0 rows gracefully
+
+        if (error) {
+            console.error("Error fetching subscription:", error);
+            return;
+        }
+
+        setSubscription(data || null);
     }, [user, supabase]);
 
     useEffect(() => {

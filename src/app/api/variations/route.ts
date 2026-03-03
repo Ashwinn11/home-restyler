@@ -3,8 +3,8 @@ import { generateRestyledImage } from "@/lib/gemini";
 import { authenticateAndCharge, chargeActionCredits } from "@/lib/api-auth";
 
 export async function POST(req: NextRequest) {
-  // Pre-check minimum 1 credit before generating variations
-  const { userId, response: authError } = await authenticateAndCharge(1);
+  // Pre-check minimum cost (20 credits) before generating variations
+  const { userId, response: authError } = await authenticateAndCharge(20);
   if (authError) return authError;
 
   try {
