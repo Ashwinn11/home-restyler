@@ -20,6 +20,23 @@ export async function POST(request: Request) {
         const customData = payload.meta?.custom_data;
         const userId = customData?.user_id;
 
+        // --- Idempotency Check (Best Practice) ---
+        // Use the event ID from Lemon Squeezy to prevent duplicate processing.
+        const webhookId = payload.meta?.event_id;
+        const supabase = await createServiceClient();
+
+        if (webhookId) {
+            const { error: idempotencyError } = await supabase
+                .from("processed_webhooks")
+                .insert({ webhook_id: webhookId });
+
+            // If the ID already exists, return Success (200) so LS stops retrying,
+            // but don't re-process the credits.
+            if (idempotencyError && idempotencyError.code === "23505") { // unique_violation
+                return NextResponse.json({ received: true, deduplicated: true });
+            }
+        }
+
         if (!userId) {
             console.error("No user_id in webhook custom data");
             return NextResponse.json({ error: "Missing user_id" }, { status: 400 });
@@ -29,8 +46,6 @@ export async function POST(request: Request) {
         const subscriptionId = String(payload.data?.id);
         const variantId = String(attributes?.variant_id);
         const status = attributes?.status;
-
-        const supabase = await createServiceClient();
 
         switch (eventName) {
             case "subscription_created": {
@@ -69,6 +84,13 @@ export async function POST(request: Request) {
             case "subscription_updated": {
                 const plan = getPlanByVariantId(variantId);
 
+                // Fetch current sub to see if the plan is changing
+                const { data: currentSub } = await supabase
+                    .from("subscriptions")
+                    .select("ls_variant_id, plan_name")
+                    .eq("ls_subscription_id", subscriptionId)
+                    .maybeSingle();
+
                 const updateData: Record<string, unknown> = {
                     status: mapLsStatus(status),
                     updated_at: new Date().toISOString(),
@@ -79,6 +101,20 @@ export async function POST(request: Request) {
                     updateData.plan_name = plan.slug;
                     updateData.credits_per_period = plan.credits;
                     updateData.price_cents = plan.priceCents;
+
+                    // Calculate if this is an Upgrade (compare prices)
+                    const oldPlan = currentSub ? getPlanByVariantId(currentSub.ls_variant_id) : null;
+                    const isUpgrade = oldPlan && plan.priceCents > oldPlan.priceCents;
+
+                    // Only grant new credits immediately if it's an UPGRADE
+                    if (currentSub && currentSub.ls_variant_id !== variantId && isUpgrade) {
+                        await addCredits(
+                            userId,
+                            plan.credits,
+                            "subscription",
+                            `Upgraded to ${plan.name} – ${plan.credits} credits added`
+                        );
+                    }
                 }
 
                 if (attributes?.renews_at) {
@@ -96,25 +132,30 @@ export async function POST(request: Request) {
             }
 
             case "subscription_payment_success": {
-                // Recurring payment — top up credits
+                // IMPORTANT: Only grant credits on "renewal" payments.
+                // Initial creation credits are handled in 'subscription_created'.
+                // Upgrades are handled immediately in 'subscription_updated'.
                 const plan = getPlanByVariantId(variantId);
-                if (plan) {
+                const billingReason = attributes?.billing_reason;
+
+                if (plan && billingReason === "renewal") {
                     await addCredits(
                         userId,
                         plan.credits,
                         "subscription",
                         `${plan.name} subscription renewed – ${plan.credits} credits`
                     );
-
-                    // Update period end
-                    await supabase
-                        .from("subscriptions")
-                        .update({
-                            current_period_end: attributes?.renews_at,
-                            status: "active",
-                        })
-                        .eq("ls_subscription_id", subscriptionId);
                 }
+
+                // Always update the period end date regardless of billing reason
+                await supabase
+                    .from("subscriptions")
+                    .update({
+                        current_period_end: attributes?.renews_at,
+                        status: "active",
+                    })
+                    .eq("ls_subscription_id", subscriptionId);
+
                 break;
             }
 

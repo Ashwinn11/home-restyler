@@ -51,14 +51,14 @@ export default function AuthModal({ open, onClose, redirectTo }: AuthModalProps)
                 {/* Close */}
                 <button
                     onClick={onClose}
-                    className="absolute -top-3 -right-3 z-10 flex h-8 w-8 items-center justify-center border border-parchment-faint/20 bg-ink-raised text-parchment-muted transition-colors hover:text-parchment"
+                    className="absolute -top-4 right-0 sm:-top-3 sm:-right-3 z-10 flex h-9 w-9 items-center justify-center border border-parchment-faint/20 bg-ink-raised text-parchment-muted transition-colors hover:text-parchment rounded-sm"
                 >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                         <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                     </svg>
                 </button>
 
-                <div className="border border-parchment-faint/15 bg-ink-raised p-8 shadow-2xl">
+                <div className="border border-parchment-faint/15 bg-ink-raised p-6 sm:p-8 shadow-2xl">
                     {/* Logo */}
                     <div className="mb-8 text-center">
                         <div className="mx-auto mb-4 h-12 w-12 overflow-hidden border border-gold/20 bg-gold/5">

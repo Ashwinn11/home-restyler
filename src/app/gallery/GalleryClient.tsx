@@ -179,39 +179,47 @@ export default function GalleryClient() {
                 {/* Lightbox */}
                 {selectedItem && (
                     <div
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-ink/90 backdrop-blur-sm p-4"
+                        className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-ink/95 backdrop-blur-md p-2 sm:p-4"
                         onClick={() => { setSelectedItem(null); setShowOriginal(false); }}
                     >
-                        <div className="relative max-h-[90vh] max-w-4xl w-full animate-reveal-up" onClick={(e) => e.stopPropagation()}>
-                            <div className="relative h-[70vh] w-full">
+                        <div className="relative flex flex-col w-full max-w-5xl h-full max-h-[92vh] animate-reveal-up" onClick={(e) => e.stopPropagation()}>
+                            {/* Close button - Top right for mobile reachability */}
+                            <button
+                                onClick={() => { setSelectedItem(null); setShowOriginal(false); }}
+                                className="absolute -top-1 -right-1 sm:top-2 sm:right-2 z-[60] flex h-9 w-9 items-center justify-center bg-ink/80 text-parchment-muted border border-parchment-faint/20 rounded-full"
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                            </button>
+
+                            <div className="relative flex-1 w-full overflow-hidden">
                                 <Image
                                     src={activeImageUrl}
                                     alt={`${selectedItem.title} — AI room redesign`}
                                     fill
-                                    sizes="(max-width: 1024px) 100vw, 75vw"
+                                    sizes="100vw"
                                     className="object-contain"
                                     priority
                                 />
                             </div>
 
                             {/* Controls */}
-                            <div className="mt-3 flex items-center justify-between border border-parchment-faint/10 bg-ink/80 px-4 py-3 backdrop-blur-sm">
-                                <div>
-                                    <h3 className="text-sm font-semibold text-parchment">{selectedItem.title}</h3>
+                            <div className="mt-2 sm:mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border border-parchment-faint/10 bg-ink-elevated/80 px-4 py-3 sm:py-4 backdrop-blur-sm rounded-lg">
+                                <div className="hidden sm:block">
+                                    <h3 className="text-sm font-semibold text-parchment truncate max-w-[200px]">{selectedItem.title}</h3>
                                     <p className="text-[10px] text-parchment-muted">{new Date(selectedItem.created_at).toLocaleDateString()}</p>
                                 </div>
                                 <div className="flex gap-2">
                                     {selectedItem.original_image_url && (
                                         <button
                                             onClick={() => setShowOriginal(!showOriginal)}
-                                            className="border border-gold/20 bg-gold/5 px-4 py-1.5 text-xs font-medium text-gold transition-all hover:bg-gold/15"
+                                            className="flex-1 sm:flex-none border border-gold/30 bg-gold/10 px-6 py-2.5 text-xs font-semibold text-gold transition-all hover:bg-gold/20"
                                         >
                                             {showOriginal ? "Show Result" : "Show Original"}
                                         </button>
                                     )}
                                     <button
                                         onClick={() => { setSelectedItem(null); setShowOriginal(false); }}
-                                        className="border border-parchment-faint/20 px-4 py-1.5 text-xs text-parchment-muted transition-all hover:bg-ink-elevated"
+                                        className="sm:hidden border border-parchment-faint/20 px-6 py-2.5 text-xs text-parchment-muted transition-all hover:bg-ink-elevated"
                                     >
                                         Close
                                     </button>

@@ -70,9 +70,10 @@ export default function BeforeAfter({ before, after }: BeforeAfterProps) {
             alt="Original room"
             className="block h-full object-cover"
             style={{
-              width: containerRef.current
-                ? `${containerRef.current.offsetWidth}px`
-                : "100vw",
+              width: "100%",
+              aspectRatio: containerRef.current
+                ? `${containerRef.current.offsetWidth} / ${containerRef.current.offsetHeight}`
+                : "auto",
             }}
             draggable={false}
           />
@@ -94,13 +95,13 @@ export default function BeforeAfter({ before, after }: BeforeAfterProps) {
               }`}
           >
             <div
-              className={`w-12 h-12 sm:w-10 sm:h-10 rounded-full border-2 flex items-center justify-center backdrop-blur-md transition-all duration-200 ${isDragging
-                  ? "border-gold bg-gold/15 shadow-[0_0_20px_rgba(201,168,76,0.25)]"
-                  : "border-parchment/50 bg-ink/40"
+              className={`w-14 h-14 sm:w-10 sm:h-10 rounded-full border-2 flex items-center justify-center backdrop-blur-md transition-all duration-200 ${isDragging
+                ? "border-gold bg-gold/15 shadow-[0_0_20px_rgba(201,168,76,0.25)]"
+                : "border-parchment/50 bg-ink/40"
                 }`}
             >
               <svg
-                className="w-4 h-4 text-parchment"
+                className="w-5 h-5 sm:w-4 sm:h-4 text-parchment"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

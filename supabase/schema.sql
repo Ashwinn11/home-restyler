@@ -150,3 +150,11 @@ create policy "Users can delete own gallery images"
     bucket_id = 'gallery-images'
     and auth.uid()::text = (storage.foldername(name))[1]
   );
+-- ─── Webhook Tracking (Idempotency) ──────────────────────────────────────────
+create table if not exists public.processed_webhooks (
+  webhook_id text primary key,
+  created_at timestamptz not null default now()
+);
+
+alter table public.processed_webhooks enable row level security;
+-- Service role only, no public access needed.

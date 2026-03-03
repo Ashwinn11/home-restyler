@@ -3,6 +3,7 @@ import "./globals.css";
 import { SITE_URL } from "@/lib/seo";
 import AuthProvider from "@/components/AuthProvider";
 import Navbar from "@/components/Navbar";
+import MobileNav from "@/components/MobileNav";
 import ToastProvider from "@/components/ToastProvider";
 
 export const metadata: Metadata = {
@@ -40,7 +41,8 @@ export default function RootLayout({
         <AuthProvider>
           <ToastProvider>
             <Navbar />
-            <main className="pt-14">{children}</main>
+            <main className="pt-14 pb-16 sm:pb-0">{children}</main>
+            <MobileNav />
           </ToastProvider>
         </AuthProvider>
       </body>

@@ -62,88 +62,77 @@ export default function MarketingLanding() {
             </span>
           </div>
 
-          <h1 className="font-display text-6xl sm:text-7xl lg:text-9xl leading-[0.85] text-parchment font-medium tracking-tight animate-reveal-up" style={{ animationDelay: '100ms' }}>
+          <h1 className="font-display text-4xl sm:text-7xl lg:text-9xl leading-[0.9] sm:leading-[0.85] text-parchment font-medium tracking-tight animate-reveal-up px-2" style={{ animationDelay: '100ms' }}>
             Restyle Any Room, <br />
-            <span className="italic font-light text-gold text-[0.85em] -mt-2 inline-block">Instantly</span>.
+            <span className="italic font-light text-gold text-[0.85em] mt-1 sm:-mt-2 inline-block">Instantly</span>.
           </h1>
 
-          <div className="mt-12 max-w-2xl animate-reveal-up" style={{ animationDelay: '200ms' }}>
-            <p className="text-lg sm:text-xl text-parchment-muted font-light leading-relaxed">
+          <div className="mt-8 sm:mt-12 max-w-2xl animate-reveal-up px-4" style={{ animationDelay: '200ms' }}>
+            <p className="text-base sm:text-xl text-parchment-muted font-light leading-relaxed">
               Upload a photo of any room and transform it with AI-powered interior design — in seconds.
-              Choose from 20+ room design styles, visualize new wall paint colors, and download your redesigned space.
+              <span className="hidden xs:inline"> Choose from 20+ room design styles, visualize new wall paint colors, and download your redesigned space.</span>
             </p>
           </div>
 
-          <div className="mt-16 flex flex-wrap justify-center gap-6 animate-reveal-up" style={{ animationDelay: '300ms' }}>
-            <a href="/studio" className="group relative px-12 py-5 bg-gold text-ink text-[11px] uppercase tracking-[0.3em] font-bold overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.3)]">
+          <div className="mt-10 sm:mt-16 flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 animate-reveal-up w-full px-6 sm:px-0" style={{ animationDelay: '300ms' }}>
+            <a href="/studio" className="group relative px-8 sm:px-12 py-4 sm:py-5 bg-gold text-ink text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.3)] text-center">
               <span className="relative z-10">Enter the Studio</span>
               <div className="absolute inset-x-0 bottom-0 h-0.5 bg-ink group-hover:h-full transition-all duration-300 -z-0 opacity-5" />
             </a>
-            <a href="#features" className="px-12 py-5 border border-parchment-faint/30 text-parchment text-[11px] uppercase tracking-[0.3em] font-semibold hover:border-gold/50 hover:text-gold transition-colors duration-500">
+            <a href="#features" className="px-8 sm:px-12 py-4 sm:py-5 border border-parchment-faint/30 text-parchment text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-semibold hover:border-gold/50 hover:text-gold transition-colors duration-500 text-center">
               Explore Systems
             </a>
           </div>
 
           {/* Centered Hero Viewfinder: Layered Composition */}
-          <div className="mt-28 w-full max-w-5xl aspect-[16/9] relative group animate-reveal-up" style={{ animationDelay: '400ms' }}>
+          <div className="mt-20 sm:mt-28 w-full max-w-5xl aspect-[16/9] relative group animate-reveal-up" style={{ animationDelay: '400ms' }}>
             {/* Main Canvas */}
             <div className="absolute inset-0 bg-ink-raised border border-parchment-faint/15 shadow-[0_50px_120px_rgba(0,0,0,0.8)] overflow-hidden">
-              <img src="/hero-after.png" alt="AI room design — living room transformed from photo into modern interior style" className="w-full h-full object-cover p-2 lg:p-4 opacity-90 group-hover:scale-105 transition-transform duration-[4000ms] " />
+              <img src="/hero-after.png" alt="AI room design" className="w-full h-full object-cover p-1 sm:p-2 lg:p-4 opacity-90 group-hover:scale-105 transition-transform duration-[4000ms] " />
               {/* Gold Frame Interface */}
-              <div className="absolute inset-8 border border-gold/15 pointer-events-none group-hover:border-gold/30 transition-colors" />
+              <div className="absolute inset-4 sm:inset-8 border border-gold/15 pointer-events-none group-hover:border-gold/30 transition-colors" />
             </div>
 
             {/* After unit - Positioned as an exterior margin note */}
-            <div className="absolute -top-24 left-1/4 sm:left-1/3 z-30 pointer-events-none transition-transform duration-700">
-              <div className="bg-gold text-ink px-4 py-1.5 text-[10px] font-bold tracking-[0.3em] transform rotate-3 shadow-2xl">
+            <div className="absolute -top-12 sm:-top-24 left-1/4 sm:left-1/3 z-30 pointer-events-none transition-transform duration-700">
+              <div className="bg-gold text-ink px-3 sm:px-4 py-1 sm:py-1.5 text-[8px] sm:text-[10px] font-bold tracking-[0.3em] transform rotate-3 shadow-2xl">
                 AFTER
               </div>
               {/* Arrow from exterior tag into image area */}
-              <div className="absolute top-6 left-1/2 w-20 h-20">
+              <div className="absolute top-4 sm:top-6 left-1/2 w-12 h-12 sm:w-20 sm:h-20">
                 <svg viewBox="0 0 100 100" className="w-full h-full text-gold/80 fill-none stroke-current stroke-[2.5] drop-shadow-[0_0_10px_rgba(201,168,76,0.4)]">
                   <path
                     d="M10,10 Q30,40 50,75"
                     className="animate-draw-path"
                     style={{ strokeDasharray: 120, strokeDashoffset: 120, '--dash-length': '120' } as any}
                   />
-                  <path
-                    d="M40,65 L51,77 L57,63"
-                    className="animate-draw-path"
-                    style={{ strokeDasharray: 40, strokeDashoffset: 40, animationDelay: '800ms', '--dash-length': '40' } as any}
-                  />
                 </svg>
               </div>
             </div>
 
             {/* Hand-drawn Path: Before to After */}
-            <div className="absolute left-[5%] bottom-[25%] w-[40%] h-[30%] z-30 pointer-events-none md:block overflow-visible">
+            <div className="hidden sm:block absolute left-[5%] bottom-[25%] w-[40%] h-[30%] z-30 pointer-events-none overflow-visible">
               <svg viewBox="0 0 200 100" className="w-full h-full text-gold/60 fill-none stroke-current stroke-[2.5] drop-shadow-[0_0_8px_rgba(201,168,76,0.3)]">
                 <path
                   d="M10,80 Q60,10 180,30"
                   className="animate-draw-path"
                   style={{ strokeDasharray: 400, strokeDashoffset: 400, '--dash-length': '400' } as any}
                 />
-                <path
-                  d="M165,22 L185,30 L168,45"
-                  className="animate-draw-path"
-                  style={{ strokeDasharray: 100, strokeDashoffset: 100, animationDelay: '800ms', '--dash-length': '100' } as any}
-                />
               </svg>
             </div>
 
             {/* Staggered Source (Before) */}
-            <div className="absolute -left-8 sm:-left-16 bottom-12 w-1/3 aspect-square bg-parchment p-3 shadow-2xl skew-y-3 -rotate-6 transition-all duration-700 hover:rotate-0 hover:skew-y-0 group-hover:shadow-[0_20px_60px_rgba(0,0,0,0.6)] z-40">
+            <div className="absolute -left-4 sm:-left-16 -bottom-6 sm:bottom-12 w-1/3 aspect-square bg-parchment p-1.5 sm:p-3 shadow-2xl skew-y-3 -rotate-6 transition-all duration-700 hover:rotate-0 hover:skew-y-0 group-hover:shadow-[0_20px_60px_rgba(0,0,0,0.6)] z-40">
               {/* Before Unit */}
-              <div className="absolute -top-20 -left-12 z-50 pointer-events-none">
-                <div className="bg-gold text-ink px-3 py-1 text-[10px] font-bold tracking-[0.2em] transform -rotate-3">BEFORE</div>
-                <div className="absolute top-4 left-10 w-16 h-16">
+              <div className="absolute -top-12 sm:-top-20 -left-6 sm:-left-12 z-50 pointer-events-none">
+                <div className="bg-gold text-ink px-2 sm:px-3 py-1 text-[8px] sm:text-[10px] font-bold tracking-[0.2em] transform -rotate-3">BEFORE</div>
+                <div className="hidden sm:block absolute top-4 left-10 w-16 h-16">
                   <svg viewBox="0 0 100 100" className="w-full h-full text-gold/80 fill-none stroke-current stroke-[2.5]">
                     <path
                       d="M10,10 Q30,40 50,60"
                       className="animate-draw-path"
                       style={{ strokeDasharray: 100, strokeDashoffset: 100, '--dash-length': '100' } as any}
                     />
-                    <path d="M40,55 L51,61 L55,48" className="animate-draw-path" style={{ strokeDasharray: 30, strokeDashoffset: 30, animationDelay: '600ms', '--dash-length': '30' } as any} />
                   </svg>
                 </div>
               </div>
@@ -170,44 +159,42 @@ export default function MarketingLanding() {
         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-gold/5' to-transparent opacity-20" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20">
-            <div className="max-w-2xl animate-reveal-up">
-              <p className="text-[10px] uppercase tracking-[0.4em] text-gold font-bold mb-6 flex items-center gap-3">
-                <span className="w-8 h-px bg-gold/50" />
-                Technological Architecture
-              </p>
-              <h2 className="font-display text-5xl sm:text-7xl text-parchment font-medium leading-[0.95] tracking-tight">
-                The Suite of <br /> <span className="italic font-light opacity-80">Transformation</span>.
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 sm:mb-28 gap-8 sm:gap-12">
+            <div className="flex-1 animate-reveal-up">
+              <span className="text-[10px] uppercase tracking-[0.4em] text-gold font-bold mb-6 block">Capabilities</span>
+              <h2 className="font-display text-4xl sm:text-6xl lg:text-8xl text-parchment leading-[0.9] font-medium tracking-tight">
+                Designed for <br />
+                <span className="italic font-light italic">Iteration</span>.
               </h2>
             </div>
             <div className="animate-reveal-up" style={{ animationDelay: '100ms' }}>
-              <p className="text-xl text-parchment-muted font-light max-w-sm leading-relaxed border-l border-gold/30 pl-8">
+              <p className="text-lg sm:text-xl text-parchment-muted font-light max-w-sm leading-relaxed border-l border-gold/30 pl-6 sm:pl-8">
                 Moving beyond prompt engineering. We built a visual pipeline for precision spatial validation.
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
             {FEATURE_COLLECTION.map((item, i) => (
               <div
                 key={item.num}
-                className={`relative border border-parchment-faint/15 bg-ink-raised rounded-lg p-10 group overflow-hidden animate-reveal-up hover:border-gold/40 transition-all duration-700 ${item.variant === 'wide' ? 'md:col-span-12 lg:col-span-8' : 'md:col-span-6 lg:col-span-4'
+                className={`relative border border-parchment-faint/15 bg-ink-raised rounded-lg p-6 sm:p-10 group overflow-hidden animate-reveal-up hover:border-gold/40 transition-all duration-700 ${item.variant === 'wide' ? 'md:col-span-12 lg:col-span-8' : 'md:col-span-6 lg:col-span-4'
                   }`}
                 style={{ animationDelay: `${i * 150}ms` }}
               >
                 {/* Background Detail */}
-                <span className="font-display text-[120px] absolute -top-12 -right-4 text-gold/5 font-bold group-hover:text-gold/10 transition-colors duration-700 pointer-events-none">
+                <span className="font-display text-8xl sm:text-[120px] absolute -top-8 -right-4 sm:-top-12 sm:-right-4 text-gold/5 font-bold group-hover:text-gold/10 transition-colors duration-700 pointer-events-none">
                   {item.num}
                 </span>
 
-                <div className="relative z-10 flex flex-col h-full justify-between gap-8">
-                  <div className="space-y-4">
+                <div className="relative z-10 flex flex-col h-full justify-between gap-6 sm:gap-8">
+                  <div className="space-y-3 sm:space-y-4">
                     <p className="text-[10px] uppercase tracking-[0.4em] text-gold/60 font-bold group-hover:text-gold transition-colors">{item.label}</p>
-                    <h3 className="font-display text-3xl sm:text-4xl text-parchment font-medium group-hover:translate-x-2 transition-transform duration-500">
+                    <h3 className="font-display text-2xl sm:text-4xl text-parchment font-medium group-hover:translate-x-2 transition-transform duration-500">
                       {item.title}
                     </h3>
                   </div>
-                  <p className="text-base text-parchment-muted leading-relaxed font-light max-w-md group-hover:text-parchment transition-colors duration-500">
+                  <p className="text-sm sm:text-base text-parchment-muted leading-relaxed font-light max-w-md group-hover:text-parchment transition-colors duration-500">
                     {item.text}
                   </p>
                 </div>
@@ -218,11 +205,11 @@ export default function MarketingLanding() {
       </section>
 
       {/* ═══ THE WORKFLOW SPREAD ═══ */}
-      <section className="py-24 sm:py-40 bg-ink-raised border-y border-parchment-faint/10 relative">
+      <section className="py-20 sm:py-40 bg-ink-raised border-y border-parchment-faint/10 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-28">
-            <h2 className="font-display text-4xl sm:text-6xl text-parchment font-medium italic animate-reveal-up">Inside the Workflow</h2>
-            <div className="w-24 h-px bg-gold mx-auto mt-8 animate-reveal-up" style={{ animationDelay: '100ms' }} />
+          <div className="text-center mb-16 sm:mb-28">
+            <h2 className="font-display text-3xl sm:text-6xl text-parchment font-medium italic animate-reveal-up">Inside the Workflow</h2>
+            <div className="w-16 sm:w-24 h-px bg-gold mx-auto mt-6 sm:mt-8 animate-reveal-up" style={{ animationDelay: '100ms' }} />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-1">
