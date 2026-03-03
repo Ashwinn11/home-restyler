@@ -108,12 +108,15 @@ export async function POST(request: Request) {
 
                     // Only grant new credits immediately if it's an UPGRADE
                     if (currentSub && currentSub.ls_variant_id !== variantId && isUpgrade) {
-                        await addCredits(
-                            userId,
-                            plan.credits,
-                            "subscription",
-                            `Upgraded to ${plan.name} – ${plan.credits} credits added`
-                        );
+                        const creditDiff = plan.credits - (oldPlan?.credits || 0);
+                        if (creditDiff > 0) {
+                            await addCredits(
+                                userId,
+                                creditDiff,
+                                "subscription",
+                                `Upgraded to ${plan.name} – ${creditDiff} incremental credits added`
+                            );
+                        }
                     }
                 }
 
