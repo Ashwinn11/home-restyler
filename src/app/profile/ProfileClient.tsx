@@ -140,7 +140,7 @@ function ProfileContent() {
                 </div>
 
                 {/* Subscription Management */}
-                {subscription && subscription.status === "active" && (
+                {subscription && (subscription.status === "active" || subscription.status === "cancelled") && (
                     <div className="mb-8 border border-parchment-faint/10 bg-ink-raised p-5">
                         <h2 className="font-display text-lg font-semibold text-parchment">Manage Subscription</h2>
                         <p className="mt-1 text-xs text-parchment-muted">

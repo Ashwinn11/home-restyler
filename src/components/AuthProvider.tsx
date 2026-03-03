@@ -82,7 +82,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
             .from("subscriptions")
             .select("*")
             .eq("user_id", user.id)
-            .in("status", ["active", "past_due"])
+            .in("status", ["active", "past_due", "cancelled"])
             .order("created_at", { ascending: false })
             .limit(1)
             .maybeSingle(); // maybeSingle() handles 0 rows gracefully
