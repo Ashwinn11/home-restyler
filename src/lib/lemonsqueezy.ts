@@ -142,6 +142,7 @@ export async function updateSubscription(
     initLemonSqueezy();
     const { data, error } = await lsUpdateSubscription(parseInt(subscriptionId, 10), {
         variantId: parseInt(newVariantId, 10),
+        invoiceImmediately: true, // Forces immediate payment & invoice for the prorated amount
     });
     if (error) {
         console.error("Update subscription error:", error);
