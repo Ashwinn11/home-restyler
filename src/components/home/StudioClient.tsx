@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ToastProvider";
 import ConfirmDialog from "@/components/ConfirmDialog";
@@ -16,7 +16,7 @@ import type {
     Snapshot,
 } from "@/lib/types";
 
-export default function StudioClient() {
+function StudioContent() {
     const { refreshCredits } = useAuth();
     const toast = useToast();
 
@@ -470,5 +470,13 @@ export default function StudioClient() {
                 onCancel={() => setConfirmRegenerateVariations(false)}
             />
         </div>
+    );
+}
+
+export default function StudioClient() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-ink" />}>
+            <StudioContent />
+        </Suspense>
     );
 }

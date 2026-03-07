@@ -151,9 +151,7 @@ export default function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
-      <Suspense fallback={<div className="min-h-screen bg-ink animate-pulse" />}>
-        <HomeClient />
-      </Suspense>
+      <HomeClient />
     </>
   );
 }

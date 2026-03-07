@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient, createServiceClient } from "@/lib/supabase-server";
 import { createCheckoutUrl, getPlans } from "@/lib/lemonsqueezy";
+import { SITE_URL } from "@/lib/seo";
 
 export async function POST(request: Request) {
     try {
@@ -71,7 +72,7 @@ export async function POST(request: Request) {
             });
         }
 
-        const origin = request.headers.get("origin") || "http://localhost:3000";
+        const origin = request.headers.get("origin") || SITE_URL;
         const redirectUrl = `${origin}/profile?checkout=success`;
 
         const checkoutUrl = await createCheckoutUrl(

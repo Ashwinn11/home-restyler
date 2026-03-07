@@ -1,4 +1,4 @@
-const normalized = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
+const normalized = (process.env.NEXT_PUBLIC_SITE_URL || "https://homerestyler.app").replace(/\/$/, "");
 
 export const SITE_URL = normalized;
 

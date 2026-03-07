@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import StudioClient from "@/components/home/StudioClient";
 import { SITE_URL, absoluteUrl } from "@/lib/seo";
@@ -12,9 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function StudioPage() {
-    return (
-        <Suspense fallback={<div className="min-h-screen bg-ink animate-pulse" />}>
-            <StudioClient />
-        </Suspense>
-    );
+    return <StudioClient />;
 }

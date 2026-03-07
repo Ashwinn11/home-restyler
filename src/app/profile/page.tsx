@@ -13,9 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function ProfilePage() {
-    return (
-        <Suspense fallback={<div className="min-h-screen bg-ink animate-pulse" />}>
-            <ProfileClient />
-        </Suspense>
-    );
+    return <ProfileClient />;
 }
