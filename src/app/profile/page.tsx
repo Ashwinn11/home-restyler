@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { SITE_URL, absoluteUrl } from "@/lib/seo";
 import ProfileClient from "./ProfileClient";
@@ -12,5 +13,9 @@ export const metadata: Metadata = {
 };
 
 export default function ProfilePage() {
-    return <ProfileClient />;
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-ink animate-pulse" />}>
+            <ProfileClient />
+        </Suspense>
+    );
 }

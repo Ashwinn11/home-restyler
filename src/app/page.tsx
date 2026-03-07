@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import HomeClient from "@/components/home/HomeClient";
 import { SITE_URL, absoluteUrl } from "@/lib/seo";
@@ -150,7 +151,9 @@ export default function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
-      <HomeClient />
+      <Suspense fallback={<div className="min-h-screen bg-ink animate-pulse" />}>
+        <HomeClient />
+      </Suspense>
     </>
   );
 }
