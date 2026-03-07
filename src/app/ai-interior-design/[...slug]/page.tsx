@@ -1,0 +1,260 @@
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import LandingHero from "@/components/seo/LandingHero";
+import {
+    ROOM_TYPES,
+    DESIGN_STYLES,
+    TOP_CITIES,
+    PAINT_COLORS,
+    COMPETITORS,
+    slugify,
+    getSEOMetadata,
+    getSEOContent,
+    SEOParams
+} from "@/lib/seo-data";
+import { absoluteUrl } from "@/lib/seo";
+
+interface PageProps {
+    params: Promise<{ slug: string[] }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { slug } = await params;
+    const seoParams = parseSlug(slug);
+
+    if (!seoParams) return notFound();
+
+    const { title, description } = getSEOMetadata(seoParams);
+    const path = `/ai-interior-design/${slug.join("/")}`;
+
+    return {
+        title,
+        description,
+        alternates: { canonical: absoluteUrl(path) },
+        openGraph: {
+            title,
+            description,
+            url: absoluteUrl(path),
+            siteName: "homerestyler",
+            type: "website",
+        },
+    };
+}
+
+function parseSlug(slug: string[]): SEOParams | null {
+    const res: SEOParams = {};
+
+    const roomSlugs = ROOM_TYPES.map(slugify);
+    const styleSlugs = DESIGN_STYLES.map(slugify);
+    const citySlugs = TOP_CITIES.map(slugify);
+    const colorSlugs = PAINT_COLORS.map(slugify);
+    const competitorSlugs = COMPETITORS.map(slugify);
+
+    let remaining = [...slug];
+
+    // A. Check for specialized prefixes
+    if (remaining[0] === "virtual-staging") {
+        res.type = "staging";
+        remaining.shift();
+        // Optional room after staging
+        const rIdx = roomSlugs.indexOf(remaining[0]);
+        if (rIdx !== -1) {
+            res.room = ROOM_TYPES[rIdx];
+            remaining.shift();
+        }
+    } else if (remaining[0] === "paint-visualizer") {
+        res.type = "paint";
+        remaining.shift();
+        // Optional color or room
+        const cIdx = colorSlugs.indexOf(remaining[0]);
+        if (cIdx !== -1) {
+            res.color = PAINT_COLORS[cIdx];
+            remaining.shift();
+        }
+        const rIdx = roomSlugs.indexOf(remaining[0]);
+        if (rIdx !== -1) {
+            res.room = ROOM_TYPES[rIdx];
+            remaining.shift();
+        }
+    } else if (remaining[0] === "alternative-to") {
+        res.type = "alternative";
+        remaining.shift();
+        const compIdx = competitorSlugs.indexOf(remaining[0]);
+        if (compIdx !== -1) {
+            res.competitor = COMPETITORS[compIdx];
+            remaining.shift();
+        }
+    }
+
+    // B. Standard combinations (if not already handled)
+    if (!res.type) {
+        res.type = "restyle";
+
+        // 1. Check for Room Type
+        const roomIdx = roomSlugs.indexOf(remaining[0]);
+        if (roomIdx !== -1) {
+            res.room = ROOM_TYPES[roomIdx];
+            remaining.shift();
+        }
+
+        // 2. Check for Style (optionally prefixed with 'style')
+        if (remaining[0] === "style" && remaining[1]) {
+            const sIdx = styleSlugs.indexOf(remaining[1]);
+            if (sIdx !== -1) {
+                res.style = DESIGN_STYLES[sIdx];
+                remaining.splice(0, 2);
+            }
+        } else if (remaining[0]) {
+            const sIdx = styleSlugs.indexOf(remaining[0]);
+            if (sIdx !== -1) {
+                res.style = DESIGN_STYLES[sIdx];
+                remaining.shift();
+            }
+        }
+
+        // 3. Check for City (prefixed with 'in')
+        if (remaining[0] === "in" && remaining[1]) {
+            const cIdx = citySlugs.indexOf(remaining[1]);
+            if (cIdx !== -1) {
+                res.city = TOP_CITIES[cIdx];
+                remaining.splice(0, 2);
+            }
+        }
+    }
+
+    // Valid if at least one parameter was found and no leftover slugs
+    if ((res.room || res.style || res.city || res.color || res.competitor || res.type) && remaining.length === 0) {
+        return res;
+    }
+
+    return null;
+}
+
+export default async function SEOLandingPage({ params }: PageProps) {
+    const { slug } = await params;
+    const seoParams = parseSlug(slug);
+
+    if (!seoParams) return notFound();
+
+    const { title, description } = getSEOMetadata(seoParams);
+    const content = getSEOContent(seoParams);
+
+    const serviceSchema = {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "serviceType": "AI Interior Design",
+        "provider": {
+            "@type": "Organization",
+            "name": "HomeRestyler",
+            "url": "https://homerestyler.app"
+        },
+        "areaServed": seoParams.city ? {
+            "@type": "City",
+            "name": seoParams.city
+        } : undefined,
+        "description": description,
+        "name": title.split("|")[0].trim()
+    };
+
+    return (
+        <main className="bg-ink min-h-screen">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+            />
+            <LandingHero
+                title={title}
+                description={description}
+                room={seoParams.room}
+                style={seoParams.style}
+                city={seoParams.city}
+                color={seoParams.color}
+                competitor={seoParams.competitor}
+                type={seoParams.type}
+            />
+
+            <section className="max-w-7xl mx-auto px-4 py-24 border-t border-parchment-faint/10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    <div className="space-y-6">
+                        <h2 className="font-display text-4xl text-parchment">Professional AI {seoParams.room || "Interior"} Design</h2>
+                        <p className="text-parchment-muted font-light leading-relaxed text-lg">
+                            {content.intro}
+                        </p>
+                        <p className="text-parchment-muted font-light leading-relaxed">
+                            {content.benefit1}
+                        </p>
+                        <p className="text-parchment-muted font-light leading-relaxed">
+                            {content.benefit2}
+                        </p>
+                    </div>
+                    <div className="space-y-8">
+                        <div className="flex gap-4">
+                            <div className="w-12 h-12 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
+                                <span className="text-gold font-bold">01</span>
+                            </div>
+                            <div>
+                                <h3 className="text-parchment font-medium mb-1">Scale Your Vision</h3>
+                                <p className="text-sm text-parchment-muted font-light">Whether you're redesigning a small {seoParams.room?.toLowerCase() || "apartment"} or a large property, our AI handles space planning with ease.</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-4">
+                            <div className="w-12 h-12 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
+                                <span className="text-gold font-bold">02</span>
+                            </div>
+                            <div>
+                                <h3 className="text-parchment font-medium mb-1">Material Integrity</h3>
+                                <p className="text-sm text-parchment-muted font-light">Our engine recognizes over 500+ material types to ensure your {seoParams.style || "modern"} render looks physical and real.</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-4">
+                            <div className="w-12 h-12 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
+                                <span className="text-gold font-bold">03</span>
+                            </div>
+                            <div>
+                                <h3 className="text-parchment font-medium mb-1">Instant Prototyping</h3>
+                                <p className="text-sm text-parchment-muted font-light">Get professional-grade spatial renders in under 60 seconds. Perfect for homeowners and interior designers alike.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    );
+}
+
+export async function generateStaticParams() {
+    const params: { slug: string[] }[] = [];
+
+    // 1. Rooms, Styles, Cities
+    ROOM_TYPES.forEach(r => params.push({ slug: [slugify(r)] }));
+    DESIGN_STYLES.forEach(s => params.push({ slug: ["style", slugify(s)] }));
+    TOP_CITIES.slice(0, 20).forEach(c => params.push({ slug: ["in", slugify(c)] }));
+
+    // 2. Room x Style (Top 5 each)
+    const topRooms = ROOM_TYPES.slice(0, 5);
+    const topStyles = DESIGN_STYLES.slice(0, 5);
+    topRooms.forEach(r => {
+        topStyles.forEach(s => {
+            params.push({ slug: [slugify(r), slugify(s)] });
+        });
+    });
+
+    // 3. Virtual Staging (Top 5 rooms)
+    topRooms.forEach(r => {
+        params.push({ slug: ["virtual-staging", slugify(r)] });
+    });
+
+    // 4. Paint Visualizer (Top 5 colors x Top 5 rooms)
+    PAINT_COLORS.slice(0, 5).forEach(color => {
+        topRooms.forEach(room => {
+            params.push({ slug: ["paint-visualizer", slugify(color), slugify(room)] });
+        });
+    });
+
+    // 5. Alternatives (Top 3)
+    COMPETITORS.slice(0, 3).forEach(comp => {
+        params.push({ slug: ["alternative-to", slugify(comp)] });
+    });
+
+    return params;
+}

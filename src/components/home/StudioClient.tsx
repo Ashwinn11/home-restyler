@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ToastProvider";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import GeneratingOverlay from "@/components/GeneratingOverlay";
@@ -46,6 +47,19 @@ export default function StudioClient() {
     const conversationHistory = useRef<ConversationTurn[]>([]);
     const styleRequestId = useRef(0);
     const [confirmRegenerateVariations, setConfirmRegenerateVariations] = useState(false);
+
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const room = searchParams.get("room");
+        const style = searchParams.get("style");
+
+        if (style) {
+            setCurrentStyle(style);
+        }
+        // If room is present, we could pre-set it in a "room type" state if it existed.
+        // Currently the app focuses on the image upload first.
+    }, [searchParams]);
 
     const resetGenerationState = useCallback(() => {
         setRestyledImage("");

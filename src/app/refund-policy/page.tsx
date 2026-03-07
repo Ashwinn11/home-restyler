@@ -28,9 +28,9 @@ export default function RefundPolicyPage() {
                         <h2 className="font-display text-lg font-semibold text-parchment mb-3">
                             1. Overview
                         </h2>
-                        <p>
-                            We want you to be satisfied with Home Restyler. If you&apos;re not happy with your
-                            subscription, we offer a straightforward refund policy.
+                        <p className="text-parchment-muted font-light leading-relaxed mb-6">
+                            We want you to be satisfied with HomeRestyler. If you're not happy with your
+                            purchase, please review our refund policy below.
                         </p>
                     </section>
 

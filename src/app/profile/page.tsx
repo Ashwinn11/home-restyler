@@ -4,9 +4,9 @@ import ProfileClient from "./ProfileClient";
 
 export const metadata: Metadata = {
     metadataBase: new URL(SITE_URL),
-    title: "Account & Credits | Home Restyler",
+    title: "Account & Credits | HomeRestyler",
     description:
-        "Manage your Home Restyler subscription, view your AI design credit balance, track usage history, and upgrade your plan.",
+        "Manage your HomeRestyler subscription, view your AI design credit balance, track usage history, and upgrade your plan.",
     alternates: { canonical: absoluteUrl("/profile") },
     robots: { index: false, follow: false },
 };

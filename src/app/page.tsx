@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import HomeClient from "@/components/home/HomeClient";
 import { SITE_URL, absoluteUrl } from "@/lib/seo";
 
-const pageTitle = "AI Room Design & Interior Redesign | Home Restyler";
+const pageTitle = "HomeRestyler | All-in-One AI Spatial Studio";
 const pageDescription =
-  "Transform any room with AI-powered interior design. Upload a photo, choose from 20+ design styles, visualize wall paint colors, and download your redesigned room in minutes. Free to try.";
+  "Experience the limitless potential of HomeRestyler. The professional AI spatial studio for virtual staging, interior redesign, and paint visualization. photoreal results in seconds.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -30,13 +30,13 @@ export const metadata: Metadata = {
     title: pageTitle,
     description: pageDescription,
     url: absoluteUrl("/"),
-    siteName: "Home Restyler",
+    siteName: "HomeRestyler",
     images: [
       {
         url: absoluteUrl("/opengraph-image"),
         width: 1200,
         height: 630,
-        alt: "Home Restyler AI room design app",
+        alt: "homerestyler AI room design app",
       },
     ],
   },
@@ -94,14 +94,14 @@ const faqSchema = {
 const softwareAppSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Home Restyler",
+  name: "HomeRestyler",
   url: absoluteUrl("/"),
   applicationCategory: "DesignApplication",
   operatingSystem: "Web",
   description: pageDescription,
   publisher: {
     "@type": "Organization",
-    name: "Home Restyler",
+    name: "HomeRestyler",
     url: absoluteUrl("/"),
   },
   offers: {
@@ -110,10 +110,10 @@ const softwareAppSchema = {
     priceCurrency: "USD",
   },
   featureList: [
-    "AI room restyling from photo",
-    "Wall paint color visualization",
-    "Chat-based image refinement",
-    "Variation generation",
+    "AI virtual staging for real estate",
+    "Paint color visualization",
+    "Architectural spatial redesign",
+    "Professional-grade photoreal renders",
     "Before/after comparison",
   ],
 };
@@ -121,7 +121,7 @@ const softwareAppSchema = {
 const webSiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Home Restyler",
+  name: "HomeRestyler",
   url: absoluteUrl("/"),
   description: pageDescription,
 };
@@ -129,7 +129,7 @@ const webSiteSchema = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Home Restyler",
+  name: "HomeRestyler",
   url: absoluteUrl("/"),
   logo: absoluteUrl("/icon.png"),
   sameAs: [],
@@ -141,10 +141,6 @@ export default function Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <script
         type="application/ld+json"

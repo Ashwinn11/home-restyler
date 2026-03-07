@@ -62,7 +62,7 @@ export default function AuthModal({ open, onClose, redirectTo }: AuthModalProps)
                     {/* Logo */}
                     <div className="mb-8 text-center">
                         <div className="mx-auto mb-4 h-12 w-12 overflow-hidden border border-gold/20 bg-gold/5">
-                            <img src="/icon.png" alt="Home Restyler" className="h-full w-full object-cover" />
+                            <img src="/icon.png" alt="homerestyler" className="h-full w-full object-cover" />
                         </div>
                         <h2 className="font-display text-2xl font-semibold text-parchment">
                             Welcome back

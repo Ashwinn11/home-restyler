@@ -29,19 +29,14 @@ export default function TermsPage() {
                             1. Acceptance of Terms
                         </h2>
                         <p>
-                            By accessing or using Home Restyler (&quot;the Service&quot;), you agree to be bound by
-                            these Terms of Service. If you disagree with any part of these terms, you may not
-                            access the Service.
+                            By accessing or using HomeRestyler (&quot;the Service&quot;), you agree to be bound by
+                            these Terms of Service. If you do not agree to these terms, please do not use the service.
                         </p>
-                    </section>
 
-                    <section>
-                        <h2 className="font-display text-lg font-semibold text-parchment mb-3">
-                            2. Description of Service
-                        </h2>
-                        <p>
-                            Home Restyler is an AI-powered interior design tool that allows users to upload
-                            room photos and generate restyled versions using artificial intelligence. The Service
+                        <h3 className="text-parchment font-medium text-lg mt-8 mb-4 uppercase tracking-wider">1. Description of Service</h3>
+                        <p className="text-parchment-muted font-light leading-relaxed">
+                            HomeRestyler is an AI-powered interior design tool that allows users to upload
+                            room photographs and generate AI-redesigned versions in various styles. The Service
                             includes image generation, refinement, variation generation, gallery storage, and
                             related features.
                         </p>
@@ -49,7 +44,7 @@ export default function TermsPage() {
 
                     <section>
                         <h2 className="font-display text-lg font-semibold text-parchment mb-3">
-                            3. User Accounts
+                            2. User Accounts
                         </h2>
                         <ul className="list-disc pl-5 space-y-1.5">
                             <li>You must sign in via Google OAuth to use the Service.</li>
@@ -65,7 +60,7 @@ export default function TermsPage() {
 
                     <section>
                         <h2 className="font-display text-lg font-semibold text-parchment mb-3">
-                            4. Credits System
+                            3. Credits System
                         </h2>
                         <ul className="list-disc pl-5 space-y-1.5">
                             <li>New accounts receive 25 free credits upon registration.</li>
@@ -89,7 +84,7 @@ export default function TermsPage() {
 
                     <section>
                         <h2 className="font-display text-lg font-semibold text-parchment mb-3">
-                            5. Subscriptions &amp; Payments
+                            4. Subscriptions &amp; Payments
                         </h2>
                         <ul className="list-disc pl-5 space-y-1.5">
                             <li>
@@ -114,7 +109,7 @@ export default function TermsPage() {
 
                     <section>
                         <h2 className="font-display text-lg font-semibold text-parchment mb-3">
-                            6. Acceptable Use
+                            5. Acceptable Use
                         </h2>
                         <p className="mb-2">You agree not to:</p>
                         <ul className="list-disc pl-5 space-y-1.5">
@@ -132,7 +127,7 @@ export default function TermsPage() {
 
                     <section>
                         <h2 className="font-display text-lg font-semibold text-parchment mb-3">
-                            7. Intellectual Property
+                            6. Intellectual Property
                         </h2>
                         <ul className="list-disc pl-5 space-y-1.5">
                             <li>
@@ -146,16 +141,16 @@ export default function TermsPage() {
                                 However, we do not guarantee exclusivity of generated designs.
                             </li>
                             <li>
-                                <strong className="text-parchment">Service IP:</strong> The Service, including its
-                                design, code, models, and branding, is owned by Home Restyler and protected
-                                by intellectual property laws.
+                                All content, tools, and services provided by HomeRestyler, including all
+                                design, code, models, and branding, is owned by HomeRestyler and protected
+                                by international copyright and trademark laws.
                             </li>
                         </ul>
                     </section>
 
                     <section>
                         <h2 className="font-display text-lg font-semibold text-parchment mb-3">
-                            8. Disclaimers
+                            7. Disclaimers
                         </h2>
                         <ul className="list-disc pl-5 space-y-1.5">
                             <li>
@@ -178,13 +173,12 @@ export default function TermsPage() {
 
                     <section>
                         <h2 className="font-display text-lg font-semibold text-parchment mb-3">
-                            9. Limitation of Liability
+                            8. Limitation of Liability
                         </h2>
                         <p>
-                            To the maximum extent permitted by law, Home Restyler shall not be liable for any
-                            indirect, incidental, special, consequential, or punitive damages, including loss
-                            of profits, data, or other intangible losses, resulting from your use of or
-                            inability to use the Service. Our total liability shall not exceed the amount you
+                            To the maximum extent permitted by law, HomeRestyler shall not be liable for any
+                            indirect, incidental, special, or consequential damages resulting from the use
+                            or inability to use the service. Our total liability shall not exceed the amount you
                             paid to us in the 12 months preceding the claim.
                         </p>
                     </section>

@@ -28,10 +28,10 @@ export default function Navbar() {
                 >
                     <img
                         src="/icon.png"
-                        alt="Home Restyler"
+                        alt="HomeRestyler"
                         className="h-6 w-6 sm:h-7 sm:w-7 rounded-sm object-cover"
                     />
-                    <span className="truncate max-w-[120px] sm:max-w-none">Home Restyler</span>
+                    <span className="truncate max-w-[120px] sm:max-w-none">HomeRestyler</span>
                 </Link>
 
                 {/* Right side */}

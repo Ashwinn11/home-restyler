@@ -8,7 +8,7 @@ import ToastProvider from "@/components/ToastProvider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Home Restyler",
+  title: "HomeRestyler",
   description:
     "Restyle any room instantly with AI-powered interior design. Upload a photo, pick a style, and transform your space.",
   manifest: "/manifest.webmanifest",

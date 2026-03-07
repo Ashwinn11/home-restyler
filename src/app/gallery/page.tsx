@@ -4,7 +4,7 @@ import GalleryClient from "./GalleryClient";
 
 export const metadata: Metadata = {
     metadataBase: new URL(SITE_URL),
-    title: "My Design Gallery | Home Restyler",
+    title: "My Design Gallery | HomeRestyler",
     description:
         "View and manage your saved AI room designs. Download, compare before and after, and revisit your favorite room transformations.",
     alternates: { canonical: absoluteUrl("/gallery") },

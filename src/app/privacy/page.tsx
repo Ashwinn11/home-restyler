@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
                             1. Introduction
                         </h2>
                         <p>
-                            Home Restyler (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) respects your privacy and is committed to
+                            homerestyler (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) respects your privacy and is committed to
                             protecting the personal data you share with us. This Privacy Policy explains how we
                             collect, use, disclose, and safeguard your information when you use our website and
                             services at homerestyler.app (the &quot;Service&quot;).

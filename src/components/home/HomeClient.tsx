@@ -29,7 +29,7 @@ function HomeInner() {
                 <img src="/icon.png" alt="" className="w-full h-full object-cover" />
               </div>
               <div>
-                <p className="font-display text-xl text-parchment font-medium">Home Restyler</p>
+                <p className="font-display text-xl text-parchment font-medium">HomeRestyler</p>
                 <div className="w-8 h-px bg-gold/40 mt-2" />
                 <p className="text-[10px] uppercase tracking-[0.2em] text-parchment-muted mt-2">
                   AI Interior Design Studio
@@ -53,7 +53,7 @@ function HomeInner() {
           </div>
 
           <div className="mt-8 pt-6 border-t border-parchment-faint/8 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-[11px] text-parchment-faint font-light">© {new Date().getFullYear()} Home Restyler. All rights reserved.</p>
+            <p className="text-[11px] text-parchment-faint font-light">© {new Date().getFullYear()} HomeRestyler. All rights reserved.</p>
             <p className="text-[11px] text-parchment-faint font-light">
               Powered by Gemini AI
             </p>
