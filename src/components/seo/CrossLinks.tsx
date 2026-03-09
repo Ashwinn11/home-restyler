@@ -8,8 +8,8 @@ interface CrossLinksProps {
 
 export default function CrossLinks({ currentRoom, currentStyle }: CrossLinksProps) {
     // Find related rooms and styles
-    const relatedRooms = ROOM_TYPES.filter(r => r !== currentRoom).slice(0, 4);
-    const relatedStyles = DESIGN_STYLES.filter(s => s !== currentStyle).slice(0, 4);
+    const relatedRooms = ROOM_TYPES.filter(r => r !== currentRoom).slice(0, 8);
+    const relatedStyles = DESIGN_STYLES.filter(s => s !== currentStyle).slice(0, 8);
 
     return (
         <section className="max-w-7xl mx-auto px-4 py-24 border-t border-parchment-faint/10">

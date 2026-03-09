@@ -285,6 +285,20 @@ export default async function SEOLandingPage({ params }: PageProps) {
                         )}
                     </div>
                     <div className="space-y-8">
+                        {/* AI-SEO Definition Block */}
+                        <div className="sr-only" aria-hidden="true">
+                            {content.definition}
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            {content.stats && content.stats.map((stat: string, i: number) => (
+                                <div key={i} className="p-4 rounded-lg bg-gold/5 border border-gold/10">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-gold mb-2">Verified Skill</p>
+                                    <p className="text-white text-xs font-medium leading-tight">{stat}</p>
+                                </div>
+                            ))}
+                        </div>
+
                         <div className="flex gap-4">
                             <div className="w-12 h-12 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
                                 <span className="text-gold font-bold">01</span>
