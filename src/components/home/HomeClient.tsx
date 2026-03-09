@@ -4,6 +4,7 @@ import { useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import MarketingLanding from "@/components/home/MarketingLanding";
 import { useAuth } from "@/components/AuthProvider";
+import ExploreLinks from "@/components/seo/ExploreLinks";
 
 function HomeInner() {
   const searchParams = useSearchParams();
@@ -21,9 +22,10 @@ function HomeInner() {
       <MarketingLanding />
 
       {/* Footer */}
-      <footer className="border-t border-parchment-faint/12 mt-auto bg-ink-raised">
+      <footer className="border-t border-parchment-faint/12 mt-auto bg-ink-raised pb-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
-          <div className="grid sm:grid-cols-3 gap-8">
+          <ExploreLinks />
+          <div className="grid sm:grid-cols-3 gap-8 mt-16">
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 border border-gold/20 flex items-center justify-center bg-ink-raised shrink-0 overflow-hidden">
                 <img src="/icon.png" alt="" className="w-full h-full object-cover" />

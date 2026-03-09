@@ -70,10 +70,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   });
 
   // 4. Room x Style Combinations (High Intent)
-  const topRooms = ROOM_TYPES.slice(0, 10);
-  const topStyles = DESIGN_STYLES.slice(0, 10);
-  topRooms.forEach((room) => {
-    topStyles.forEach((style) => {
+  ROOM_TYPES.forEach((room) => {
+    DESIGN_STYLES.forEach((style) => {
       programmaticEntries.push({
         url: absoluteUrl(`/ai-interior-design/${slugify(room)}/${slugify(style)}`),
         lastModified: new Date(),
@@ -83,8 +81,35 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   });
 
-  // 5. Virtual Staging
-  ROOM_TYPES.slice(0, 10).forEach((room) => {
+  // 5. Room x City Combinations (Local Intent)
+  const topCities = TOP_CITIES.slice(0, 50);
+  const coreRooms = ROOM_TYPES.slice(0, 10);
+  coreRooms.forEach((room) => {
+    topCities.forEach((city) => {
+      programmaticEntries.push({
+        url: absoluteUrl(`/ai-interior-design/${slugify(room)}/in/${slugify(city)}`),
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.6,
+      });
+    });
+  });
+
+  // 6. Style x City Combinations (Design Intent)
+  const coreStyles = DESIGN_STYLES.slice(0, 10);
+  coreStyles.forEach((style) => {
+    topCities.forEach((city) => {
+      programmaticEntries.push({
+        url: absoluteUrl(`/ai-interior-design/style/${slugify(style)}/in/${slugify(city)}`),
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.5,
+      });
+    });
+  });
+
+  // 7. Virtual Staging
+  ROOM_TYPES.forEach((room) => {
     programmaticEntries.push({
       url: absoluteUrl(`/ai-interior-design/virtual-staging/${slugify(room)}`),
       lastModified: new Date(),
@@ -93,17 +118,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   });
 
-  // 6. Paint Visualizer
+  // 8. Paint Visualizer (All Colors x Top Rooms)
   PAINT_COLORS.forEach((color) => {
-    programmaticEntries.push({
-      url: absoluteUrl(`/ai-interior-design/paint-visualizer/${slugify(color)}`),
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
+    ROOM_TYPES.slice(0, 8).forEach(room => {
+      programmaticEntries.push({
+        url: absoluteUrl(`/ai-interior-design/paint-visualizer/${slugify(color)}/${slugify(room)}`),
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.7,
+      });
     });
   });
 
-  // 7. Competitor Alternatives
+  // 9. Competitor Alternatives
   COMPETITORS.forEach((comp) => {
     programmaticEntries.push({
       url: absoluteUrl(`/ai-interior-design/alternative-to/${slugify(comp)}`),

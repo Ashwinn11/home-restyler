@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Routes that don't require authentication
-const PUBLIC_ROUTES = ["/", "/login", "/auth/callback", "/api/billing/webhook", "/privacy", "/terms", "/refund-policy"];
+const PUBLIC_ROUTES = ["/", "/login", "/auth/callback", "/api/billing/webhook", "/privacy", "/terms", "/refund-policy", "/ai-interior-design"];
 
 // Static/asset prefixes to skip entirely
 const SKIP_PREFIXES = ["/_next", "/favicon", "/icon", "/apple-touch-icon", "/manifest", "/opengraph-image", "/twitter-image", "/robots", "/sitemap"];

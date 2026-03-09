@@ -1,3 +1,4 @@
+import React from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import LandingHero from "@/components/seo/LandingHero";
@@ -13,9 +14,58 @@ import {
     SEOParams
 } from "@/lib/seo-data";
 import { absoluteUrl } from "@/lib/seo";
+import CrossLinks from "@/components/seo/CrossLinks";
 
 interface PageProps {
     params: Promise<{ slug: string[] }>;
+}
+
+function Breadcrumbs({ params }: { params: SEOParams }) {
+    const { room, style, city, color, competitor, type } = params;
+    const items = [{ name: "Home", url: "/" }];
+
+    if (type === "staging") {
+        items.push({ name: "Virtual Staging", url: "/ai-interior-design/virtual-staging" });
+        if (room) items.push({ name: room, url: `/ai-interior-design/virtual-staging/${slugify(room)}` });
+    } else if (type === "paint") {
+        items.push({ name: "Paint Visualizer", url: "/ai-interior-design/paint-visualizer" });
+        if (color) items.push({ name: color, url: `/ai-interior-design/paint-visualizer/${slugify(color)}` });
+        if (room) items.push({ name: room, url: `/ai-interior-design/paint-visualizer/${color ? slugify(color) : ""}/${slugify(room)}` });
+    } else if (type === "alternative") {
+        items.push({ name: "Alternatives", url: "/ai-interior-design/alternatives" });
+        if (competitor) items.push({ name: competitor, url: `/ai-interior-design/alternative-to/${slugify(competitor)}` });
+    } else {
+        items.push({ name: "Interior Design", url: "/ai-interior-design/living-room" });
+        if (room) items.push({ name: room, url: `/ai-interior-design/${slugify(room)}` });
+        if (style) items.push({ name: style, url: `/ai-interior-design/${room ? slugify(room) : "style"}/${slugify(style)}` });
+        if (city) items.push({ name: city, url: `/ai-interior-design/in/${slugify(city)}` });
+    }
+
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": items.map((item, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": item.name,
+            "item": absoluteUrl(item.url)
+        }))
+    };
+
+    return (
+        <nav className="max-w-7xl mx-auto px-4 py-8 flex items-center gap-2 text-[10px] uppercase tracking-widest text-parchment-faint/40 overflow-x-auto whitespace-nowrap scrollbar-hide">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+            {items.map((item, i) => (
+                <React.Fragment key={item.url}>
+                    {i > 0 && <span>/</span>}
+                    <a href={item.url} className="hover:text-gold transition-colors">{item.name}</a>
+                </React.Fragment>
+            ))}
+        </nav>
+    );
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -37,6 +87,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             url: absoluteUrl(path),
             siteName: "homerestyler",
             type: "website",
+        },
+        robots: {
+            index: true,
+            follow: true,
+            googleBot: {
+                index: true,
+                follow: true,
+                'max-image-preview': 'large',
+                'max-snippet': -1,
+                'max-video-preview': -1,
+            },
         },
     };
 }
@@ -162,6 +223,7 @@ export default async function SEOLandingPage({ params }: PageProps) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
             />
+            <Breadcrumbs params={seoParams} />
             <LandingHero
                 title={title}
                 description={description}
@@ -218,6 +280,7 @@ export default async function SEOLandingPage({ params }: PageProps) {
                     </div>
                 </div>
             </section>
+            <CrossLinks currentRoom={seoParams.room} currentStyle={seoParams.style} />
         </main>
     );
 }
@@ -225,34 +288,49 @@ export default async function SEOLandingPage({ params }: PageProps) {
 export async function generateStaticParams() {
     const params: { slug: string[] }[] = [];
 
-    // 1. Rooms, Styles, Cities
+    // 1. Core Rooms, Styles, Cities (Top 50)
     ROOM_TYPES.forEach(r => params.push({ slug: [slugify(r)] }));
     DESIGN_STYLES.forEach(s => params.push({ slug: ["style", slugify(s)] }));
-    TOP_CITIES.slice(0, 20).forEach(c => params.push({ slug: ["in", slugify(c)] }));
+    TOP_CITIES.slice(0, 50).forEach(c => params.push({ slug: ["in", slugify(c)] }));
 
-    // 2. Room x Style (Top 5 each)
-    const topRooms = ROOM_TYPES.slice(0, 5);
-    const topStyles = DESIGN_STYLES.slice(0, 5);
-    topRooms.forEach(r => {
-        topStyles.forEach(s => {
+    // 2. Room x Style (Top 10 rooms x Top 10 styles = 100)
+    const midRooms = ROOM_TYPES.slice(0, 10);
+    const midStyles = DESIGN_STYLES.slice(0, 10);
+    midRooms.forEach(r => {
+        midStyles.forEach(s => {
             params.push({ slug: [slugify(r), slugify(s)] });
         });
     });
 
-    // 3. Virtual Staging (Top 5 rooms)
-    topRooms.forEach(r => {
+    // 3. Room x City (Top 8 rooms x Top 20 cities = 160)
+    const top20Cities = TOP_CITIES.slice(0, 20);
+    midRooms.slice(0, 8).forEach(r => {
+        top20Cities.forEach(c => {
+            params.push({ slug: [slugify(r), "in", slugify(c)] });
+        });
+    });
+
+    // 4. Style x City (Top 8 styles x Top 20 cities = 160)
+    midStyles.slice(0, 8).forEach(s => {
+        top20Cities.forEach(c => {
+            params.push({ slug: ["style", slugify(s), "in", slugify(c)] });
+        });
+    });
+
+    // 5. Virtual Staging (All rooms)
+    ROOM_TYPES.forEach(r => {
         params.push({ slug: ["virtual-staging", slugify(r)] });
     });
 
-    // 4. Paint Visualizer (Top 5 colors x Top 5 rooms)
+    // 6. Paint Visualizer (Top 5 colors x Top 10 rooms = 50)
     PAINT_COLORS.slice(0, 5).forEach(color => {
-        topRooms.forEach(room => {
+        midRooms.forEach(room => {
             params.push({ slug: ["paint-visualizer", slugify(color), slugify(room)] });
         });
     });
 
-    // 5. Alternatives (Top 3)
-    COMPETITORS.slice(0, 3).forEach(comp => {
+    // 7. Alternatives (Top 5)
+    COMPETITORS.slice(0, 5).forEach(comp => {
         params.push({ slug: ["alternative-to", slugify(comp)] });
     });
 
