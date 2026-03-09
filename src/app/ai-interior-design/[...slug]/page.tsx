@@ -217,12 +217,31 @@ export default async function SEOLandingPage({ params }: PageProps) {
         "name": title.split("|")[0].trim()
     };
 
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": (content as any).tips?.map((tip: string, i: number) => ({
+            "@type": "Question",
+            "name": `Professional Design Tip #${i + 1} for ${seoParams.room || "your room"}`,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": tip
+            }
+        }))
+    };
+
     return (
         <main className="bg-ink min-h-screen">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
             />
+            {(content as any).tips && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+                />
+            )}
             <Breadcrumbs params={seoParams} />
             <LandingHero
                 title={title}
@@ -248,6 +267,22 @@ export default async function SEOLandingPage({ params }: PageProps) {
                         <p className="text-parchment-muted font-light leading-relaxed">
                             {content.benefit2}
                         </p>
+
+                        {(content as any).tips && (
+                            <div className="mt-12 pt-12 border-t border-parchment-faint/10">
+                                <h3 className="text-gold uppercase tracking-widest text-xs font-bold mb-6">Expert Design Advice</h3>
+                                <div className="space-y-6">
+                                    {(content as any).tips.map((tip: string, i: number) => (
+                                        <div key={i} className="flex gap-4">
+                                            <div className="w-6 h-6 rounded-full border border-gold/30 flex items-center justify-center shrink-0">
+                                                <div className="w-1 h-1 rounded-full bg-gold" />
+                                            </div>
+                                            <p className="text-parchment font-light italic text-sm">{tip}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <div className="space-y-8">
                         <div className="flex gap-4">

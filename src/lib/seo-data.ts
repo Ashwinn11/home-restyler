@@ -139,9 +139,26 @@ export function getSEOContent(params: SEOParams) {
   const styleText = style ? `the ${style} aesthetic` : "modern design styles";
   const cityText = city ? `homes in ${city}` : "modern properties";
 
+  // Dynamic Tips for "Unique Value"
+  const tips: string[] = [];
+  if (room === "Kitchen") tips.push("Focus on the 'Work Triangle' between the sink, stove, and refrigerator for optimal flow.");
+  if (room === "Bedroom") tips.push("Symmetry is key in bedroom design. Try matching nightstands and lamps for a balanced look.");
+  if (room === "Living Room") tips.push("Define zones with area rugs to make large open-concept spaces feel more intentional.");
+  if (room === "Bathroom") tips.push("Maximize vertical space with floating shelves to keep small bathrooms feeling airy.");
+
+  if (style === "Japandi") tips.push("Combine Scandinavian functionality with Japanese rustic minimalism using natural wood and neutral palettes.");
+  if (style === "Industrial") tips.push("Expose structural elements like brick walls and metal pipes to lean into the raw, urban look.");
+  if (style === "Modern Minimalist") tips.push("Invest in high-quality 'statement' pieces rather than filling the room with smaller decor.");
+
+  if (tips.length === 0) {
+    tips.push("Ensure your furniture arrangement respects the natural walking paths of the room.");
+    tips.push("Use layers of lighting—ambient, task, and accent—to create depth in your design.");
+  }
+
   return {
     intro: `Visualize ${styleText} for ${roomText} instantly. Our AI spatial engine analyzes your existing architecture to deliver professional-grade ${style ? style + " " : ""}results tailored for ${cityText}.`,
     benefit1: `For ${city ? city + " residents" : "homeowners"}, our AI provides localized design trends that match the unique architectural character of ${city || "modern homes"}.`,
     benefit2: `Achieve a perfect ${style || "modern"} balance. Whether you're in a ${city || "city"} apartment or a suburban home, our AI respects your room's natural light and proportions.`,
+    tips
   };
 }
