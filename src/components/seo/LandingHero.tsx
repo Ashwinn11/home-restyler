@@ -26,7 +26,7 @@ export default function LandingHero({ title, description, room, style, city, col
     if (isPaint) ctaLabel = `Paint My ${room || "Walls"} Now`;
     if (isAlt) ctaLabel = "Try HomeRestyler Now";
 
-    const studioUrl = `/studio?room=${room || ""}&style=${style || ""}${color ? `&color=${color}` : ""}${type ? `&mode=${type === "paint" ? "paint" : "restyle"}` : ""}`;
+    const studioUrl = `/studio?room=${encodeURIComponent(room || "")}&style=${encodeURIComponent(style || "")}${color ? `&color=${encodeURIComponent(color)}` : ""}${type ? `&mode=${type === "paint" ? "paint" : "restyle"}` : ""}`;
 
     return (
         <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden py-16 px-4">
@@ -59,6 +59,7 @@ export default function LandingHero({ title, description, room, style, city, col
                 <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4 animate-reveal-up w-full px-6 sm:px-0" style={{ animationDelay: '200ms' }}>
                     <a
                         href={studioUrl}
+                        rel="nofollow"
                         className="group relative px-12 py-5 bg-gold text-ink text-[11px] uppercase tracking-[0.3em] font-bold overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.3)] text-center"
                     >
                         <span className="relative z-10">{ctaLabel}</span>

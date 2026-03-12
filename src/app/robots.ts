@@ -7,10 +7,12 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
+        disallow: ["/studio", "/gallery", "/profile", "/studio/", "/gallery/", "/profile/", "/*?*modal="],
       },
       {
         userAgent: ["GPTBot", "ChatGPT-User", "ClaudeBot", "anthropic-ai", "PerplexityBot", "Bingbot", "Googlebot"],
         allow: "/",
+        disallow: ["/studio", "/gallery", "/profile", "/studio/", "/gallery/", "/profile/", "/*?*modal="],
       },
     ],
     sitemap: absoluteUrl("/sitemap.xml"),

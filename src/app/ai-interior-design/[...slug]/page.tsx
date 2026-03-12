@@ -342,26 +342,26 @@ export async function generateStaticParams() {
     DESIGN_STYLES.forEach(s => params.push({ slug: ["style", slugify(s)] }));
     TOP_CITIES.slice(0, 50).forEach(c => params.push({ slug: ["in", slugify(c)] }));
 
-    // 2. Room x Style (Top 10 rooms x Top 10 styles = 100)
-    const midRooms = ROOM_TYPES.slice(0, 10);
-    const midStyles = DESIGN_STYLES.slice(0, 10);
-    midRooms.forEach(r => {
-        midStyles.forEach(s => {
+    // 2. Room x Style (ALL rooms x ALL styles = ~270)
+    ROOM_TYPES.forEach(r => {
+        DESIGN_STYLES.forEach(s => {
             params.push({ slug: [slugify(r), slugify(s)] });
         });
     });
-
-    // 3. Room x City (Top 8 rooms x Top 20 cities = 160)
-    const top20Cities = TOP_CITIES.slice(0, 20);
-    midRooms.slice(0, 8).forEach(r => {
-        top20Cities.forEach(c => {
+    
+    // 3. Room x City (Top 10 rooms x Top 50 cities = 500)
+    const top50Cities = TOP_CITIES.slice(0, 50);
+    const midRooms = ROOM_TYPES.slice(0, 10);
+    midRooms.forEach(r => {
+        top50Cities.forEach(c => {
             params.push({ slug: [slugify(r), "in", slugify(c)] });
         });
     });
 
-    // 4. Style x City (Top 8 styles x Top 20 cities = 160)
-    midStyles.slice(0, 8).forEach(s => {
-        top20Cities.forEach(c => {
+    // 4. Style x City (Top 10 styles x Top 50 cities = 500)
+    const midStyles = DESIGN_STYLES.slice(0, 10);
+    midStyles.forEach(s => {
+        top50Cities.forEach(c => {
             params.push({ slug: ["style", slugify(s), "in", slugify(c)] });
         });
     });
@@ -371,15 +371,15 @@ export async function generateStaticParams() {
         params.push({ slug: ["virtual-staging", slugify(r)] });
     });
 
-    // 6. Paint Visualizer (Top 5 colors x Top 10 rooms = 50)
-    PAINT_COLORS.slice(0, 5).forEach(color => {
+    // 6. Paint Visualizer (Top 10 colors x Top 10 rooms = 100)
+    PAINT_COLORS.slice(0, 10).forEach(color => {
         midRooms.forEach(room => {
             params.push({ slug: ["paint-visualizer", slugify(color), slugify(room)] });
         });
     });
 
-    // 7. Alternatives (Top 5)
-    COMPETITORS.slice(0, 5).forEach(comp => {
+    // 7. Alternatives (ALL competitors)
+    COMPETITORS.forEach(comp => {
         params.push({ slug: ["alternative-to", slugify(comp)] });
     });
 

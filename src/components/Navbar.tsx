@@ -71,6 +71,7 @@ export default function Navbar() {
                             <div className="hidden sm:flex items-center gap-1">
                                 <Link
                                     href="/studio"
+                                    rel="nofollow"
                                     className={`px-3 py-1.5 text-xs font-medium transition-colors rounded-md ${isLinkActive("/studio")
                                         ? "bg-gold/10 text-gold"
                                         : "text-parchment-muted hover:bg-ink-elevated hover:text-parchment"
@@ -80,6 +81,7 @@ export default function Navbar() {
                                 </Link>
                                 <Link
                                     href="/gallery"
+                                    rel="nofollow"
                                     className={`px-3 py-1.5 text-xs font-medium transition-colors rounded-md ${isLinkActive("/gallery")
                                         ? "bg-gold/10 text-gold"
                                         : "text-parchment-muted hover:bg-ink-elevated hover:text-parchment"
@@ -89,6 +91,7 @@ export default function Navbar() {
                                 </Link>
                                 <Link
                                     href="/profile"
+                                    rel="nofollow"
                                     className={`px-3 py-1.5 text-xs font-medium transition-colors rounded-md ${isLinkActive("/profile")
                                         ? "bg-gold/10 text-gold"
                                         : "text-parchment-muted hover:bg-ink-elevated hover:text-parchment"
@@ -101,6 +104,7 @@ export default function Navbar() {
                             {/* Avatar / Profile - Simple on Mobile */}
                             <Link
                                 href="/profile"
+                                rel="nofollow"
                                 className="flex items-center gap-2 rounded-lg p-0.5 sm:px-2 sm:py-1 transition-colors hover:bg-ink-elevated"
                             >
                                 {user.user_metadata?.avatar_url ? (

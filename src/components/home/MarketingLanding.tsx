@@ -75,7 +75,7 @@ export default function MarketingLanding() {
           </div>
 
           <div className="mt-10 sm:mt-16 flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 animate-reveal-up w-full px-6 sm:px-0" style={{ animationDelay: '300ms' }}>
-            <a href="/studio" className="group relative px-8 sm:px-12 py-4 sm:py-5 bg-gold text-ink text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.3)] text-center">
+            <a href="/studio" rel="nofollow" className="group relative px-8 sm:px-12 py-4 sm:py-5 bg-gold text-ink text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.3)] text-center">
               <span className="relative z-10">Enter the Studio</span>
               <div className="absolute inset-x-0 bottom-0 h-0.5 bg-ink group-hover:h-full transition-all duration-300 -z-0 opacity-5" />
             </a>
@@ -252,7 +252,7 @@ export default function MarketingLanding() {
             </h2>
             <div className="p-8 border border-gold/20 bg-gold/5 backdrop-blur-md rounded-lg max-w-sm group hover:border-gold/40 transition-all duration-500">
               <p className="font-display text-xl text-parchment font-medium italic mb-5">Ready to restyle your world?</p>
-              <a href="/studio" className="inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] font-bold text-gold group-hover:text-gold-soft transition-colors">
+              <a href="/studio" rel="nofollow" className="inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] font-bold text-gold group-hover:text-gold-soft transition-colors">
                 Open The Studio
                 <svg className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </a>

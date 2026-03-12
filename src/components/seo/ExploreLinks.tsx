@@ -62,7 +62,7 @@ export default function ExploreLinks() {
           <div className="space-y-3">
             <a href="/privacy" className="block text-xs text-parchment-muted hover:text-gold transition-colors font-light">Privacy Policy</a>
             <a href="/terms" className="block text-xs text-parchment-muted hover:text-gold transition-colors font-light">Terms of Service</a>
-            <a href="/alternative-to/interior-ai" className="block text-xs text-parchment-muted hover:text-gold transition-colors font-light">vs Interior AI</a>
+            <a href="/ai-interior-design/alternative-to/interior-ai" className="block text-xs text-parchment-muted hover:text-gold transition-colors font-light">vs Interior AI</a>
           </div>
         </div>
       </div>

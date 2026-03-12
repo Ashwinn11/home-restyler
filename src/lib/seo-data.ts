@@ -117,10 +117,10 @@ export function getSEOContent(params: SEOParams) {
 
   // Authority Statistics
   const stats = [
-    "1,000,000+ room redesigns generated monthly.",
-    "95% accuracy in color matching with major paint brands.",
+    `1,000,000+ room redesigns generated ${city ? `in markets including ${city}` : "monthly"}.`,
+    `95% accuracy in color matching with ${city ? "local" : "major"} paint brands.`,
     "Zero-risk visualization: Test styles before buying a single piece.",
-    "Used by 50,000+ professional interior designers worldwide."
+    `Used by 50,000+ designers ${city ? `serving the ${city} area` : "worldwide"}.`
   ];
 
   if (type === "alternative") {
@@ -157,16 +157,46 @@ export function getSEOContent(params: SEOParams) {
   const styleText = style ? `the ${style} aesthetic` : "modern design styles";
   const cityText = city ? `homes in ${city}` : "modern properties";
 
+  // Regional/City Context for local SEO value
+  let localContext = "";
+  if (city) {
+    const usCities = TOP_CITIES.slice(0, 40);
+    const euCities = TOP_CITIES.slice(60, 85);
+    const asCities = TOP_CITIES.slice(85);
+
+    if (usCities.includes(city)) {
+      localContext = `Optimized for North American architectural standards, from open-concept suburban layouts to urban industrial lofts common in ${city}.`;
+    } else if (euCities.includes(city)) {
+      localContext = `Tailored for European spatial constraints, respecting high-ceiling traditional builds and compact modern apartments found across ${city}.`;
+    } else if (asCities.includes(city)) {
+      localContext = `Designed to balance high-density urban living with modern aesthetic requirements typical of ${city}'s evolving skyline.`;
+    }
+  }
+
   // Dynamic Tips for "Unique Value"
   const tips: string[] = [];
   if (room === "Kitchen") tips.push("Focus on the 'Work Triangle' between the sink, stove, and refrigerator for optimal flow.");
   if (room === "Bedroom") tips.push("Symmetry is key in bedroom design. Try matching nightstands and lamps for a balanced look.");
   if (room === "Living Room") tips.push("Define zones with area rugs to make large open-concept spaces feel more intentional.");
   if (room === "Bathroom") tips.push("Maximize vertical space with floating shelves to keep small bathrooms feeling airy.");
+  if (room === "Home Office") tips.push("Position your desk near a window for natural light, but avoid direct glare on your screen.");
+  if (room === "Nursery") tips.push("Prioritize soft, washable textures and ensure all furniture is securely anchored for safety.");
+  if (room === "Dining Room") tips.push("The distance between the table and walls should be at least 36 inches to allow for comfortable movement.");
+  if (room === "Attic") tips.push("Embrace slanted ceilings by using low-profile furniture and light colors to keep the space feeling open.");
+  if (room === "Basement") tips.push("Focus on high-quality layered lighting to compensate for the lack of natural light in below-grade spaces.");
+  if (room === "Outdoor Patio") tips.push("Use weather-resistant rugs and string lights to create an 'outdoor room' feel that extends your living space.");
 
   if (style === "Japandi") tips.push("Combine Scandinavian functionality with Japanese rustic minimalism using natural wood and neutral palettes.");
   if (style === "Industrial") tips.push("Expose structural elements like brick walls and metal pipes to lean into the raw, urban look.");
   if (style === "Modern Minimalist") tips.push("Invest in high-quality 'statement' pieces rather than filling the room with smaller decor.");
+  if (style === "Bohemian") tips.push("Layer different patterns, textures, and plants to create a relaxed, globally-inspired atmosphere.");
+  if (style === "Coastal") tips.push("Use a palette of sandy neutrals and sea blues with natural fibers like jute and seagrass.");
+  if (style === "Farmhouse") tips.push("Mix vintage finds with modern comforts, focusing on reclaimed wood and matte black accents.");
+  if (style === "Scandinavian") tips.push("Prioritize 'Hygge'—warmth and coziness—through soft textiles, light woods, and clean lines.");
+  if (style === "Art Deco") tips.push("Incorporate bold geometric patterns, gold metallic accents, and rich jewel-toned fabrics.");
+  if (style === "Traditional") tips.push("Focus on classic silhouettes, wood-carved details, and formal arrangements for a timeless feel.");
+  if (style === "Rustic") tips.push("Emphasis on rugged, natural beauty with raw materials and a warm, earthy color palette.");
+  if (style === "Mediterranean") tips.push("Use terra cotta tiles, wrought iron details, and textured plaster walls for a sun-drenched coastal feel.");
 
   if (tips.length === 0) {
     tips.push("Ensure your furniture arrangement respects the natural walking paths of the room.");
@@ -177,7 +207,7 @@ export function getSEOContent(params: SEOParams) {
     definition,
     stats,
     intro: `Visualize ${styleText} for ${roomText} instantly. Our AI spatial engine analyzes your existing architecture to deliver professional-grade ${style ? style + " " : ""}results tailored for ${cityText}.`,
-    benefit1: `For ${city ? city + " residents" : "homeowners"}, our AI provides localized design trends that match the unique architectural character of ${city || "modern homes"}.`,
+    benefit1: localContext || `For ${city ? city + " residents" : "homeowners"}, our AI provides localized design trends that match the unique architectural character of ${city || "modern homes"}.`,
     benefit2: `Achieve a perfect ${style || "modern"} balance. Whether you're in a ${city || "city"} apartment or a suburban home, our AI respects your room's natural light and proportions.`,
     tips
   };

@@ -103,7 +103,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: absoluteUrl(`/ai-interior-design/style/${slugify(style)}/in/${slugify(city)}`),
         lastModified: new Date(),
         changeFrequency: "monthly",
-        priority: 0.5,
+        priority: 0.7,
       });
     });
   });

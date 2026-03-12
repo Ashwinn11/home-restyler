@@ -47,6 +47,7 @@ export default function MobileNav() {
                         <Link
                             key={link.href}
                             href={link.href}
+                            rel="nofollow"
                             className={`flex flex-col items-center justify-center gap-1 w-16 transition-colors ${isActive ? "text-gold" : "text-parchment-muted"
                                 }`}
                         >

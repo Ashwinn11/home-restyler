@@ -58,6 +58,28 @@ export default function ExplorePage() {
                     {/* Right Column */}
                     <div className="space-y-16">
                         <div>
+                            <h2 className="text-gold uppercase tracking-[0.3em] text-[10px] font-black mb-8 border-l-2 border-gold pl-4">Popular Combinations</h2>
+                            <div className="grid gap-4">
+                                {ROOM_TYPES.slice(0, 5).map(room => (
+                                    <div key={room} className="space-y-2">
+                                        <p className="text-[10px] uppercase tracking-widest text-parchment-faint">{room} Styles</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {DESIGN_STYLES.slice(0, 4).map(style => (
+                                                <a 
+                                                    key={style} 
+                                                    href={`/ai-interior-design/${slugify(room)}/${slugify(style)}`}
+                                                    className="text-[11px] px-2 py-1 rounded border border-parchment-faint/10 hover:border-gold/30 hover:text-gold transition-colors"
+                                                >
+                                                    {style}
+                                                </a>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div>
                             <h2 className="text-gold uppercase tracking-[0.3em] text-[10px] font-black mb-8 border-l-2 border-gold pl-4">Staging & Paint</h2>
                             <div className="grid gap-6">
                                 <a href="/ai-interior-design/virtual-staging/living-room" className="text-xl text-parchment hover:text-gold transition-colors">Virtual Staging Hub</a>

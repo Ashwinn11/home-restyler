@@ -8,7 +8,16 @@ const PUBLIC_ROUTES = ["/", "/login", "/auth/callback", "/api/billing/webhook", 
 const SKIP_PREFIXES = ["/_next", "/favicon", "/icon", "/apple-touch-icon", "/manifest", "/opengraph-image", "/twitter-image", "/robots", "/sitemap"];
 
 export async function middleware(request: NextRequest) {
-    const { pathname } = request.nextUrl;
+    const { pathname, host } = request.nextUrl;
+    const protocol = request.headers.get("x-forwarded-proto") || "http";
+
+    // Enforce non-www and https
+    if (host.startsWith("www.") || protocol === "http") {
+        const url = request.nextUrl.clone();
+        url.host = host.replace(/^www\./, "");
+        url.protocol = "https";
+        return NextResponse.redirect(url, 301);
+    }
 
     // Skip static assets
     if (SKIP_PREFIXES.some((p) => pathname.startsWith(p))) {

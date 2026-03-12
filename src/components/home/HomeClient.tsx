@@ -41,9 +41,9 @@ function HomeInner() {
 
             <div className="space-y-2">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-parchment-faint mb-3">Product</p>
-              <a href="/studio" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Studio</a>
-              <a href="/gallery" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Gallery</a>
-              <a href="/profile" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Profile</a>
+              <a href="/studio" rel="nofollow" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Studio</a>
+              <a href="/gallery" rel="nofollow" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Gallery</a>
+              <a href="/profile" rel="nofollow" className="block text-xs text-parchment-muted hover:text-parchment transition-colors">Profile</a>
             </div>
 
             <div className="space-y-2">
